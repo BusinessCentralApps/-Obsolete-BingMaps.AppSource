@@ -2,7 +2,7 @@
     "type":  "AppSource App",
     "country":  "us",
     "VersioningStrategy":  0,
-    "templateUrl":  "https://github.com/microsoft/AL-Go-AppSource",
+    "templateUrl":  "https://github.com/freddydk/AL-Go-AppSource",
     "KeyVaultName":  "BuildVariables",
     "gitHubRunner":  "self-hosted",
     "LicenseFileUrlSecretName":  "LicenseFile",
