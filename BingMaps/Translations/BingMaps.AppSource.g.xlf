@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="en-US" original="BingMaps.AppSource">
+    <body>
+      <group id="body">
+        <trans-unit id="Table 1596334907 - Field 4200184881 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Customer - Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1596334907 - Field 2094324416 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Geocoded</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Customer - Field Geocoded - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1596334907 - Field 1266564 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Latitude</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Customer - Field Latitude - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1596334907 - Field 1270796821 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Longitude</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Customer - Field Longitude - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1596334907 - Field 3632147569 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zoom</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Customer - Field Zoom - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1596334907 - Field 3168444338 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Address</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Customer - Field Address - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1596334907 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps Customer Location</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Customer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4013111100 - Field 3188694442 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps PK</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Settings - Field BingMaps PK - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4013111100 - Field 3978512174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Settings - Field BingMaps Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4013111100 - Field 715706394 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps Key OK</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Settings - Field BingMaps Key OK - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4013111100 - Field 354226601 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps WS Username</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Settings - Field BingMaps WS Username - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4013111100 - Field 1314837890 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps WS Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table BingMaps Settings - Field BingMaps WS Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4013111100 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps Settings</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Settings - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BingMaps Setup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Control 3800514526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Welcome to the BingMaps Integration App</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Control Welcome - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Control 3800514526 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>In order to use the App, you will need to specify a BingMaps Key. Press the AssistEdit button to get assistance on how to create your own key.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Control Welcome - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Control 3978512174 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Key for Bingmaps API</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Control BingMaps Key - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Control 715706394 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Flag, indicating whether BingMaps API key is OK</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Control BingMaps Key OK - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Control 3253292860 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Username for BingMaps Web Service Access</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Control Web Services Username - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Control 2186490187 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Web Services Key for BingMaps Web Service Access</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Control Web Services Key - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Action 3935925243 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Geocode All Customers</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Action GeocodeAll - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Action 3935925243 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Geocode all customers in a background process</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Action GeocodeAll - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Action 3038988208 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Test BingMaps Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Action TestBingMapsKey - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Action 3038988208 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Test BingMaps Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Action TestBingMapsKey - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Action 63766726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Test the App Key Vault Secret Provider feature</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Action TestAppKeyVault - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3612446102 - Action 63766726 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Test the App Key Vault Secret Provider feature</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps Setup - Action TestAppKeyVault - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1644548295 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Customer Map</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps CustomerMap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1644548295 - Control 4200184881 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Customer no.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page BingMaps CustomerMap - Control No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4185458596 - Control 1644548295 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 523354100">
+          <source>Customer Map</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension BingMaps Cust Card - Control BingMaps CustomerMap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4185458596 - Action 333443377 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 523354100">
+          <source>Show All Customers on Bing Maps</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension BingMaps Cust Card - Action BingMaps ShowAll - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4185458596 - Action 333443377 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 523354100">
+          <source>Open a web page, showing all customers on a map</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension BingMaps Cust Card - Action BingMaps ShowAll - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3306174242 - Control 1644548295 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2901867346">
+          <source>Customer Map</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension BingMaps Cust List - Control BingMaps CustomerMap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3306174242 - Action 333443377 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2901867346">
+          <source>Show All Customers on Bing Maps</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension BingMaps Cust List - Action BingMaps ShowAll - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3306174242 - Action 333443377 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2901867346">
+          <source>Open a web page, showing all customers on a map</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension BingMaps Cust List - Action BingMaps ShowAll - Property ToolTip</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

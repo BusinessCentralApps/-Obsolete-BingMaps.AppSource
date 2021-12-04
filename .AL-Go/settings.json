@@ -1,0 +1,23 @@
+{
+    "type":  "AppSource App",
+    "country":  "us",
+    "VersioningStrategy":  0,
+    "templateUrl":  "https://github.com/microsoft/AL-Go-AppSource",
+    "KeyVaultName":  "BuildVariables",
+    "LicenseFileUrlSecretName":  "LicenseFile",
+    "KeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
+    "KeyVaultCertificatePasswordSecretName":  "KeyVaultCertificatePassword",
+    "KeyVaultClientIdSecretName":  "KeyVaultClientId",
+    "CodeSignCertificateUrlSecretName":  "CodeSignCertificateUrl",
+    "CodeSignCertificatePasswordSecretName":  "CodeSignCertificatePassword",
+    "AppSourceCopMandatoryAffixes":  [
+                                         "BingMaps"
+                                     ],
+    "appFolders":  [
+                       "BingMaps"
+                   ],
+    "testFolders":  [
+                        "BingMaps.Test"
+                    ],
+    "RepoVersion":  "3.0"
+}

@@ -1,0 +1,65 @@
+name: Publish To Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      appVersion:
+        description: App version to deploy (current, prerelease, draft, latest or version number)
+        required: false
+        default: 'current'
+      environmentName:
+        description: Environment to receive the new version (* for all)
+        required: false
+        default: '*'
+
+defaults:
+  run:
+    shell: PowerShell
+
+jobs:
+
+  Environments:
+    runs-on: windows-latest
+    outputs:
+      environments: ${{ steps.Environments.outputs.environments }}
+      environmentCount: ${{ steps.Environments.outputs.environmentCount }}
+    steps:
+      - name: Environments
+        id: Environments
+        run: |
+          $headers = @{ 
+            "Authorization" = "token ${{ github.token }}"
+            "Accept"        = "application/vnd.github.v3+json"
+          }
+          $url = "$($ENV:GITHUB_API_URL)/repos/$($ENV:GITHUB_REPOSITORY)/environments"
+          $environments = @((Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri $url | ConvertFrom-Json).environments | ForEach-Object { $_.Name })
+          if ($environments.Count -eq 1) {
+            $environmentsJSon = "[$($environments | ConvertTo-Json -compress)]"
+          }
+          else {
+            $environmentsJSon = $environments | ConvertTo-Json -compress
+          }
+          Write-Host "::set-output name=environments::$($environments | ConvertTo-Json -compress)"
+          Write-Host "::set-output name=environmentCount::$($environments.Count)"
+        
+  Deploy:
+    runs-on: windows-latest
+    needs: [ Environments ]
+    if: ${{ needs.Environments.outputs.environmentCount > 0 }}
+    strategy:
+      matrix:
+        environment: ${{ fromJson(needs.Environments.outputs.environments) }}
+      fail-fast: false
+    name: Deploy to ${{ matrix.environment }}
+    environment:
+      name: ${{ matrix.environment }}
+    steps:
+      - name: Deploy
+        uses: freddydk/AL-Go-Actions/Deploy@main
+        env:
+          authContext: '${{ secrets.AuthContext }}'
+        with:
+          type: 'Publish'
+          projects: '${{ secrets.Projects }}'
+          environmentName: ${{ matrix.environment }}
+          artifacts: ${{ github.event.inputs.appVersion }}

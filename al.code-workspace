@@ -1,0 +1,16 @@
+{
+    "folders":  [
+                    {
+                        "path":  ".AL-Go"
+                    },
+                    {
+                        "path":  "BingMaps"
+                    },
+                    {
+                        "path":  "BingMaps.Test"
+                    }
+                ],
+    "settings":  {
+
+                 }
+}

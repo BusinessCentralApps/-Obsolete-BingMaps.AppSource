@@ -1,0 +1,38 @@
+name: Create a new test app
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Name
+        required: true
+        default: '<YourAppName>.Test'      
+      publisher:
+        description: Publisher
+        required: true
+      idrange:
+        description: ID range
+        required: true
+        default: '50000..99999'  
+      directCommit:
+        description: Direct COMMIT (Y/N)
+        required: false
+        default: 'N'
+
+defaults:
+  run:
+    shell: PowerShell
+
+jobs:
+  update:
+    runs-on: windows-latest
+
+    steps:
+      - name: Creating a new test app
+        uses: freddydk/AL-Go-Actions/CreateApp@main
+        with:
+          type: 'Test App'
+          publisher: ${{ github.event.inputs.publisher }}
+          name: ${{ github.event.inputs.name }}
+          idrange: ${{ github.event.inputs.idrange }}
+          directCommit: ${{ github.event.inputs.directCommit }}
