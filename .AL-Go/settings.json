@@ -4,6 +4,7 @@
     "VersioningStrategy":  0,
     "templateUrl":  "https://github.com/microsoft/AL-Go-AppSource",
     "KeyVaultName":  "BuildVariables",
+    "gitHubRunner":  "self-hosted",
     "LicenseFileUrlSecretName":  "LicenseFile",
     "KeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
     "KeyVaultCertificatePasswordSecretName":  "KeyVaultCertificatePassword",
