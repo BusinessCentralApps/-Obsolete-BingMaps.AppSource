@@ -1,8 +1,8 @@
-name: Test Next Minor
+﻿name: Test Next Minor
 
 on:
   schedule:
-  - cron: '0 2 * * *'
+  - cron: '0 0 * * *'
   workflow_dispatch:
 
 defaults:
@@ -157,3 +157,4 @@ jobs:
         with: 
           eventId: "DO0100"
           telemetryScopeJson: ${{ needs.initialization.outputs.telemetryScopeJson }}               
+
