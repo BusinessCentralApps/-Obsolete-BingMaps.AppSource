@@ -1,8 +1,6 @@
-﻿name: Test Next Major
+﻿name: Test Current
 
 on:
-  schedule:
-  - cron: '0 1 */3 * *'
   workflow_dispatch:
 
 defaults:
@@ -18,7 +16,7 @@ jobs:
       - id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          eventId: "DO0099"
+          eventId: "DO0100"
 
   Analyze:
     runs-on: [ windows-latest ]
@@ -155,6 +153,6 @@ jobs:
         id: PostProcess
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          eventId: "DO0099"
+          eventId: "DO0100"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
 
