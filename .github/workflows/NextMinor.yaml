@@ -1,8 +1,8 @@
-name: Test Next Minor
+﻿name: Test Next Minor
 
 on:
   schedule:
-  - cron: '0 2 * * *'
+  - cron: '0 0 * * *'
   workflow_dispatch:
 
 defaults:
@@ -154,6 +154,7 @@ jobs:
       - name: Finalizing the workflow
         id: postProcess
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
-        with: 
+        with:
           eventId: "DO0100"
-          telemetryScopeJson: ${{ needs.initialization.outputs.telemetryScopeJson }}               
+          telemetryScopeJson: ${{ needs.initialization.outputs.telemetryScopeJson }}
+
