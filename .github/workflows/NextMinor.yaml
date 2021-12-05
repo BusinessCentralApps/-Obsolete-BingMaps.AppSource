@@ -1,4 +1,4 @@
-name: NextMinor
+name: Test Next Minor
 
 on:
   schedule:

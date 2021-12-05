@@ -1,4 +1,4 @@
-name: NextMajor
+name: Test Next Major
 
 on:
   schedule:
