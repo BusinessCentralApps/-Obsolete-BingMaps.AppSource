@@ -1,5 +1,5 @@
 ﻿{
-    "templateUrl":  "https://github.com/microsoft/AL-Go-AppSource@v0.1",
+    "templateUrl":  "https://github.com/freddydk/AL-Go-AppSource@v0.1",
     "NextMajorSchedule":  "0 1 * * 1,3,5",
     "NextMinorSchedule":  "0 0 * * *"
 }
