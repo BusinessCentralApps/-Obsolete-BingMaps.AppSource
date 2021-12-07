@@ -1,4 +1,4 @@
-#
+﻿#
 # Script for creating local development environment
 # Please do not modify this script as it will be auto-updated from the AL-Go Template
 # Recommended approach is to use as is or add a script (freddyk-devenv.ps1), which calls this script with the user specific parameters
@@ -18,7 +18,7 @@ $ALGoHelperPath = "$([System.IO.Path]::GetTempFileName()).ps1"
 $webClient = New-Object System.Net.WebClient
 $webClient.CachePolicy = New-Object System.Net.Cache.RequestCachePolicy -argumentList ([System.Net.Cache.RequestCacheLevel]::NoCacheNoStore)
 $webClient.Encoding = [System.Text.Encoding]::UTF8
-$webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/main/AL-Go-Helper.ps1', $ALGoHelperPath)
+$webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v0.1/AL-Go-Helper.ps1', $ALGoHelperPath)
 . $ALGoHelperPath -local
 
 $baseFolder = Join-Path $PSScriptRoot ".." -Resolve
@@ -116,3 +116,4 @@ CreateDevEnv `
     -credential $credential `
     -LicenseFileUrl $licenseFileUrl `
     -InsiderSasToken $insiderSasToken
+
