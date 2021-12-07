@@ -25,7 +25,7 @@ jobs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
       - id: init
-        uses: microsoft/AL-Go-Actions/WorkflowInitialize@v0.1
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
           eventId: "DO0090"
 
@@ -34,7 +34,7 @@ jobs:
     needs: [ Initialization ]
     steps:
       - name: Add existing app
-        uses: microsoft/AL-Go-Actions/AddExistingApp@v0.1
+        uses: freddydk/AL-Go-Actions/AddExistingApp@main
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
@@ -48,7 +48,7 @@ jobs:
     steps:
       - name: Finalizing the workflow
         id: PostProcess
-        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@v0.1
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
           eventId: "DO0090"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
