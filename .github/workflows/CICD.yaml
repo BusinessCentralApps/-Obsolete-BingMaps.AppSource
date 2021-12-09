@@ -49,11 +49,10 @@ jobs:
     runs-on: [ windows-latest ]
     needs: [ Initialization ]
     outputs:
-      projects: ${{ steps.ReadSettings.outputs.projects }}
-      projectCount: ${{ steps.ReadSettings.outputs.projectCount }}
-      environments: ${{ steps.ReadSettings.outputs.environments }}
-      environmentCount: ${{ steps.ReadSettings.outputs.environmentCount }}
-      githubRunner: ${{ steps.ReadSettings.outputs.githubRunner }}
+      settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
+      projects: ${{ steps.ReadSettings.outputs.ProjectsJson }}
+      environments: ${{ steps.ReadSettings.outputs.EnvironmentsJson }}
+      githubRunner: ${{ steps.ReadSettings.outputs.GitHubRunnerJson }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
