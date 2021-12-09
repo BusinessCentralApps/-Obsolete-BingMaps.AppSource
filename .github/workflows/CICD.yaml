@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Read settings
-        id: Settings
+        id: ReadSettings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
