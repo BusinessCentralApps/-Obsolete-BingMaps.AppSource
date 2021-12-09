@@ -51,7 +51,9 @@ jobs:
     outputs:
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
       projects: ${{ steps.ReadSettings.outputs.ProjectsJson }}
+      projectCount: ${{ steps.ReadSettings.outputs.ProjectCount }}
       environments: ${{ steps.ReadSettings.outputs.EnvironmentsJson }}
+      environmentCount: ${{ steps.ReadSettings.outputs.EnvironmentCount }}
       githubRunner: ${{ steps.ReadSettings.outputs.GitHubRunnerJson }}
     steps:
       - name: Checkout
