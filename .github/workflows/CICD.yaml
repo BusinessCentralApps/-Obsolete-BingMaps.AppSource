@@ -159,6 +159,7 @@ jobs:
     name: Deploy to ${{ matrix.environment }}
     environment:
       name: ${{ matrix.environment }}
+      url: 'https://www.google.com'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
