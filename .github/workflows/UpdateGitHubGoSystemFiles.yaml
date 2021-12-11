@@ -1,4 +1,4 @@
-name: Update AL-Go System Files
+﻿name: Update AL-Go System Files
 
 on:
   workflow_dispatch:
@@ -17,8 +17,19 @@ defaults:
     shell: PowerShell
 
 jobs:
-  update:
+  Initialization:
     runs-on: [ windows-latest ]
+    outputs:
+      telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+    steps:
+      - id: init
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        with:
+          eventId: "DO0098"
+
+  Update:
+    runs-on: [ windows-latest ]
+    needs: [ Initialization ]
 
     steps:
       - name: Checkout
@@ -27,6 +38,7 @@ jobs:
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
+          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           get: KeyVaultName,GhTokenWorkflowSecretName,TemplateUrl
 
       - name: Read secrets
@@ -34,6 +46,7 @@ jobs:
         env:
           secrets: ${{ toJson(secrets) }}
         with:
+          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
           secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
 
@@ -48,7 +61,21 @@ jobs:
       - name: Update AL-Go system files
         uses: freddydk/AL-Go-Actions/CheckForUpdates@main
         with:
+          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           token: ${{ env.ghTokenWorkflow }}
-          update: Y
+          Update: Y
           templateUrl: ${{ env.TemplateUrl }}
           directCommit: ${{ github.event.inputs.directCommit }}
+
+  PostProcess:
+    if: always()
+    runs-on: [ windows-latest ]
+    needs: [ Initialization, Update ]
+    steps:
+      - name: Finalizing the workflow
+        id: PostProcess
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
+        with:
+          eventId: "DO0098"
+          telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+
