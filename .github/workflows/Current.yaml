@@ -7,8 +7,6 @@ defaults:
   run:
     shell: PowerShell
 
-
-
 jobs:
   Initialization:
     runs-on: [ windows-latest ]
@@ -113,4 +111,5 @@ jobs:
         with:
           eventId: "DO0100"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+
 
