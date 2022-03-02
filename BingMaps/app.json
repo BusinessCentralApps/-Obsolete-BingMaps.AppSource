@@ -28,12 +28,16 @@
     "features":  [
                      "TranslationFile"
                  ],
-    "showMyCode":  true,
+    "resourceExposurePolicy": {
+        "allowDebugging": true,
+        "allowDownloadingSource": true,
+        "includeSourceInSymbolFile": true
+    },
     "target":  "Cloud",
     "supportedLocales":  [
                              "en-US"
                          ],
-    "runtime":  "7.2",
+    "runtime":  "8.0",
     "keyVaultUrls":  [
 
                      ],

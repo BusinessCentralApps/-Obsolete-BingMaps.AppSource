@@ -47,7 +47,11 @@
                          "to":  70149
                      }
                  ],
-    "runtime":  "7.2",
-    "showMyCode":  true,
+    "runtime":  "8.0",
+    "resourceExposurePolicy": {
+        "allowDebugging": true,
+        "allowDownloadingSource": true,
+        "includeSourceInSymbolFile": true
+    },
     "target":  "Cloud"
 }
