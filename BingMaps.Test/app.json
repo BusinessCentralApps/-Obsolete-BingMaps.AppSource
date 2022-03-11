@@ -1,10 +1,10 @@
-{
+﻿{
     "id":  "81eb0a83-7ca0-42e3-9dac-0b530a7c326b",
     "name":  "BingMaps.AppSource_Test",
     "publisher":  "Freddy Kristiansen",
     "brief":  "",
     "description":  "",
-    "version":  "2.0.0.0",
+    "version":  "3.0.0.0",
     "privacyStatement":  "",
     "EULA":  "",
     "help":  "",
@@ -48,10 +48,10 @@
                      }
                  ],
     "runtime":  "8.0",
-    "resourceExposurePolicy": {
-        "allowDebugging": true,
-        "allowDownloadingSource": true,
-        "includeSourceInSymbolFile": true
-    },
+    "resourceExposurePolicy":  {
+                                   "allowDebugging":  true,
+                                   "allowDownloadingSource":  true,
+                                   "includeSourceInSymbolFile":  true
+                               },
     "target":  "Cloud"
 }
