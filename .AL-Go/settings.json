@@ -1,4 +1,4 @@
-{
+﻿{
     "type":  "AppSource App",
     "country":  "us",
     "VersioningStrategy":  0,
@@ -18,5 +18,5 @@
     "testFolders":  [
                         "BingMaps.Test"
                     ],
-    "RepoVersion":  "3.0"
+    "RepoVersion":  "4.0"
 }
