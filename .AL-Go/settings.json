@@ -3,6 +3,7 @@
     "country":  "us",
     "gitHubRunner":  "self-hosted",
     "LicenseFileUrlSecretName":  "LicenseFile",
+    "VersioningStrategy":  16,
     "KeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
     "KeyVaultCertificatePasswordSecretName":  "KeyVaultCertificatePassword",
     "KeyVaultClientIdSecretName":  "KeyVaultClientId",
