@@ -1,7 +1,6 @@
 ﻿{
     "type":  "AppSource App",
     "country":  "us",
-    "VersioningStrategy":  16,
     "gitHubRunner":  "self-hosted",
     "LicenseFileUrlSecretName":  "LicenseFile",
     "KeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
