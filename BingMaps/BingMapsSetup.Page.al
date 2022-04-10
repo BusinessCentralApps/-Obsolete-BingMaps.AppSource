@@ -30,7 +30,7 @@ page 70074122 "BingMaps Setup"
 
                     trigger OnAssistEdit()
                     begin
-                        HYPERLINK('http://msdn.microsoft.com/en-us/library/ff428642.aspx');
+                        HYPERLINK('http://msdn.microsoft.com/en-us/library/ff428642.aspx'); 
                     end;
                 }
                 field("BingMaps Key OK"; Rec."BingMaps Key OK")
