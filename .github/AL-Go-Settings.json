@@ -1,9 +1,10 @@
 ﻿{
-    "templateUrl":  "https://github.com/freddydk/AL-Go-AppSource@main",
-    "gitHubRunner":  "self-hosted",
     "SendExtendedTelemetryToMicrosoft":  true,
     "BcContainerHelperVersion":  "dev",
     "PartnerTelemetryConnectionString": "InstrumentationKey=84bd9223-67d4-4378-8590-9e4a46023be2;IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/",
     "NextMajorSchedule":  "0 1 * * 1,3,5",
-    "NextMinorSchedule":  "0 0 * * *"
+    "gitHubRunner":  "self-hosted",
+    "templateUrl":  "https://github.com/freddydk/AL-Go-AppSource@main",
+    "NextMinorSchedule":  "0 0 * * *",
+    "PartnerTelemetryConnectionString":  "InstrumentationKey=84bd9223-67d4-4378-8590-9e4a46023be2;IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/"
 }
