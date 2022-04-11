@@ -35,6 +35,7 @@ page 70074125 "BingMaps Settings"
         }
     }
 
+
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     var
         BingMapsSettings: Record "BingMaps Settings";
