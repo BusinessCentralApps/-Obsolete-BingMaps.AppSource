@@ -1,5 +1,6 @@
 ﻿{
     "type":  "PTE",
+    "enablePerTenantExtensionCop":  false,
     "country":  "us",
     "LicenseFileUrlSecretName":  "LicenseFile",
     "VersioningStrategy":  16,
