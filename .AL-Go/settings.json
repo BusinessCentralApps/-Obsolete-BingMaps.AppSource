@@ -1,5 +1,5 @@
 ﻿{
-    "type":  "AppSource App",
+    "type":  "PTE",
     "country":  "us",
     "LicenseFileUrlSecretName":  "LicenseFile",
     "VersioningStrategy":  16,
