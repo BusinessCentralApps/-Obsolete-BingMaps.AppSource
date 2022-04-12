@@ -86,8 +86,18 @@ jobs:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
+      - name: Read secrets (PR)
+        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        if: github.event_name == 'pull_request'
+        env:
+          secrets: ${{ toJson(secrets) }}
+        with:
+          settingsJson: ${{ env.Settings }}
+          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,AuthContext'
+
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        if: github.event_name != 'pull_request'
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -179,18 +189,8 @@ jobs:
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
 
-      - name: Read secrets (PR)
-        uses: freddydk/AL-Go-Actions/ReadSecrets@main
-        if: github.event_name == 'pull_request'
-        env:
-          secrets: ${{ toJson(secrets) }}
-        with:
-          settingsJson: ${{ env.Settings }}
-          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,AuthContext'
-
       - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
-        if: github.event_name != 'pull_request'
         env:
           secrets: ${{ toJson(secrets) }}
         with:
