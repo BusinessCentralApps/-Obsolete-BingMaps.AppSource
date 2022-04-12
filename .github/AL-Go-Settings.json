@@ -2,7 +2,7 @@
     "NextMajorSchedule":  "0 2 * * 0",
     "NextMinorSchedule":  "0 2 * * 6",
     "gitHubRunner":  "self-hosted",
-    "templateUrl":  "https://github.com/microsoft/AL-Go-AppSource@main",
+    "templateUrl":  "https://github.com/freddydk/AL-Go-AppSource@main",
     "SendExtendedTelemetryToMicrosoft":  true,
     "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
     "UpdateDependencies":  true,
