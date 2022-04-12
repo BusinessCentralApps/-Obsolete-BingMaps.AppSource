@@ -96,7 +96,7 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'licenseFileUrl,insiderSasToken,KeyVaultCertificateUrl,KeyVaultCertificatePassword,KeyVaultClientId'
 
-          - name: Read secrets
+      - name: Read secrets
         uses: freddydk/AL-Go-Actions/ReadSecrets@main
         if: github.event_name != 'pull_request'
         env:
