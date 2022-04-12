@@ -46,7 +46,7 @@ page 70074125 "BingMaps Settings"
             'BingMapsKey':
                 begin
                     if not BingMapsSettings.WritePermission() then
-                        ERROR('User does not have permissions to write to the settings table.');
+                        ERROR('User does not have permissions to write to the settings table');
                     BingMapsSetup.GetSettings(BingMapsSettings);
                     BingMapsSettings."BingMaps Key" := COPYSTR(Rec."Value", 0, 80);
                     BingMapsSettings.Modify();
