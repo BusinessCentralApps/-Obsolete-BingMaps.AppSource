@@ -6,11 +6,14 @@ on:
     paths-ignore:
       - 'README.md'
       - '.github/**'
-    branches: [ main ]
+    branches: [ main, release/*, feature/* ]
   pull_request:
     paths-ignore:
       - 'README.md'
       - '.github/**'
+
+permissions:
+  contents: read
 
 defaults:
   run:
@@ -124,14 +127,14 @@ jobs:
           if ($project -eq ".") { $project = $settings.RepoName }
           'Apps','Dependencies','TestApps','TestResults','BuildOutput' | ForEach-Object {
             $name = "$($_)ArtifactsName"
-            $value = "$project-$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
+            $value = "$project-$("$ENV:GITHUB_REF_NAME".Replace('/','_'))-$_-$($settings.repoVersion).$($settings.appBuild).$($settings.appRevision)"
             Write-Host "::set-output name=$name::$value"
             Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
           }
 
       - name: Publish artifacts - apps
         uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && (github.ref_name == 'main' || startswith(github.ref_name, 'release/'))
         with:
           name: ${{ env.appsArtifactsName }}
           path: '${{ matrix.project }}/output/Apps/'
@@ -139,7 +142,7 @@ jobs:
 
       - name: Publish artifacts - dependencies
         uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && (github.ref_name == 'main' || startswith(github.ref_name, 'release/'))
         with:
           name: ${{ env.dependenciesArtifactsName }}
           path: '${{ matrix.project }}/output/Dependencies/'
@@ -147,7 +150,7 @@ jobs:
 
       - name: Publish artifacts - test apps
         uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && (github.ref_name == 'main' || startswith(github.ref_name, 'release/'))
         with:
           name: ${{ env.testAppsArtifactsName }}
           path: '${{ matrix.project }}/output/TestApps/'
@@ -179,7 +182,7 @@ jobs:
   Deploy:
     runs-on: [ windows-latest ] 
     needs: [ Initialization, Build ]
-    if: ${{ github.event_name != 'pull request' && needs.Initialization.outputs.environmentCount > 0 }}
+    if: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' && needs.Initialization.outputs.environmentCount > 0 }}
     strategy:
       matrix:
         environment: ${{ fromJson(needs.Initialization.outputs.environments) }}
@@ -211,27 +214,42 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,AuthContext'
+          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName'
 
       - name: AuthContext
         id: authContext
         run: |
-          $authContext = [System.Environment]::GetEnvironmentVariable('${{ steps.envName.outputs.envName }}-AuthContext')
-          if ($authContext) {
-            Write-Host "Using ${{ steps.envName.outputs.envName }}-AuthContext secret"
+          $envName = '${{ steps.envName.outputs.envName }}'
+          $authContext = $null
+          "$($envName)-AuthContext", "$($envName)_AuthContext", "AuthContext" | ForEach-Object {
+            if (!($authContext)) {
+              $authContext = [System.Environment]::GetEnvironmentVariable($_)
+              if ($authContext) {
+                Write-Host "Using $_ secret"
+              }
+            }            
           }
-          else {
-            $authContext = [System.Environment]::GetEnvironmentVariable('AuthContext')
-            if ($authContext) {
-              Write-Host "Using AuthContext secret"
-            }
-            else {
-              Write-Host "::Error::No AuthContext provided"
-              exit 1
-            }
+          if (!($authContext)) {
+            Write-Host "::Error::No AuthContext provided"
+            exit 1
           }
+          $environmentName = $null
+          "$($envName)-EnvironmentName", "$($envName)_EnvironmentName", "EnvironmentName" | ForEach-Object {
+            if (!($EnvironmentName)) {
+              $EnvironmentName = [System.Environment]::GetEnvironmentVariable($_)
+              if ($EnvironmentName) {
+                Write-Host "Using $_ secret"
+              }
+            }            
+          }
+          if (!($environmentName)) {
+            $environmentName = '${{ steps.envName.outputs.envName }}'
+          }
+          $environmentName = ($environmentName + '${{ matrix.environment }}'.SubString($envName.Length)).ToUpperInvariant()
           Write-Host "::set-output name=authContext::$authContext"
           Write-Host "set-output name=authContext::$authContext"
+          Write-Host "::set-output name=environmentName::$environmentName"
+          Write-Host "set-output name=environmentName::$environmentName"
 
       - name: Deploy
         uses: freddydk/AL-Go-Actions/Deploy@main
@@ -240,7 +258,7 @@ jobs:
         with:
           type: 'CD'
           projects: '${{ secrets.Projects }}'
-          environmentName: ${{ matrix.environment }}
+          environmentName: '${{ steps.authContext.outputs.environmentName }}'
           artifacts: '${{ github.workspace }}\artifacts'
 
   PostProcess:
