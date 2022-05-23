@@ -175,7 +175,7 @@ jobs:
 
       - name: Publish artifacts - bcpt test results
         uses: actions/upload-artifact@v2
-        if: (success() || failure()) && (${{ hashFiles('bcptTestResults.json') }})
+        if: (success() || failure()) && ('${{ hashFiles('bcptTestResults.json') }}' == 'gurli')
         with:
           name: ${{ env.bcptTestResultsArtifactsName }}!${{ hashFiles('bcptTestResults.json') }}!
           path: '${{ matrix.project }}/bcptTestResults.json'
