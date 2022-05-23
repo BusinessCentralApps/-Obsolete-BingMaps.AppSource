@@ -181,6 +181,11 @@ jobs:
           path: '${{ matrix.project }}/bcptTestResults.json'
           if-no-files-found: ignore
 
+      - name: Dump
+        id: dump
+        run: |
+          Write-Host '"${{ hashFiles('bcptTestResults.json') }}"'
+
       - name: Cleanup
         if: always()
         uses: freddydk/AL-Go-Actions/PipelineCleanup@main
