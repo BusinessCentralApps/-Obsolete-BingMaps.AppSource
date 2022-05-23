@@ -177,7 +177,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: (success() || failure()) && ('${{ hashFiles('bcptTestResults.json') }}' != '')
         with:
-          name: ${{ env.bcptTestResultsArtifactsName }}
+          name: ${{ env.bcptTestResultsArtifactsName }}!${{ hashFiles('bcptTestResults.json') }}!
           path: '${{ matrix.project }}/bcptTestResults.json'
           if-no-files-found: ignore
 
