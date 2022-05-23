@@ -167,7 +167,7 @@ jobs:
 
       - name: Publish artifacts - test results
         uses: actions/upload-artifact@v2
-        if: (success() || failure()) && (hashFiles(format('{0}/TestResults.json',matrix.project)) != '')
+        if: (success() || failure()) && (hashFiles(format('{0}/TestResults.xml',matrix.project)) != '')
         with:
           name: ${{ env.testResultsArtifactsName }}
           path: '${{ matrix.project }}/TestResults.xml'
