@@ -175,16 +175,11 @@ jobs:
 
       - name: Publish artifacts - bcpt test results
         uses: actions/upload-artifact@v2
-        if: (success() || failure()) && (hashFiles('${{ matrix.project }}/bcptTestResults.json') != '')
+        if: (success() || failure()) && ('${{ hashFiles('${{ matrix.project }}/bcptTestResults.json') }}' != '')
         with:
           name: ${{ env.bcptTestResultsArtifactsName }}
           path: '${{ matrix.project }}/bcptTestResults.json'
           if-no-files-found: ignore
-
-      - name: Dump
-        id: dump
-        run: |
-          Write-Host '"${{ hashFiles('bcptTestResults.json') }}"'
 
       - name: Cleanup
         if: always()
