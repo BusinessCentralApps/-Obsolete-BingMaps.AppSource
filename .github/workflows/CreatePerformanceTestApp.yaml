@@ -1,15 +1,31 @@
-﻿name: Increment Version Number
+﻿name: Create a new performance test app
 
 on:
   workflow_dispatch:
     inputs:
       project:
-        description: Project name if the repository is setup for multiple projects (* for all projects)
+        description: Project name if the repository is setup for multiple projects
         required: false
         default: '.'
-      versionNumber:
-        description: Updated Version Number. Use Major.Minor for absolute change, use +Major.Minor for incremental change.
+      name:
+        description: Name
         required: true
+        default: '<YourAppName>.PerformanceTest'         
+      publisher:
+        description: Publisher
+        required: true
+      idrange:
+        description: ID range
+        required: true
+        default: '50000..99999'  
+      sampleCode:
+        description: Include Sample code (Y/N)
+        required: false
+        default: 'Y'
+      sampleSuite:
+        description: Include Sample BCPT Suite (Y/N)
+        required: false
+        default: 'Y'
       directCommit:
         description: Direct COMMIT (Y/N)
         required: false
@@ -36,21 +52,26 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          eventId: "DO0096"
+          eventId: "DO0102"
 
   Update:
     runs-on: [ bc-build ]
     needs: [ Initialization ]
 
     steps:
-      - name: Increment Version Number
-        uses: freddydk/AL-Go-Actions/IncrementVersionNumber@main
+      - name: Creating a new test app
+        uses: freddydk/AL-Go-Actions/CreateApp@main
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
-          versionNumber: ${{ github.event.inputs.versionNumber }}
+          type: 'Performance Test App'
+          publisher: ${{ github.event.inputs.publisher }}
+          name: ${{ github.event.inputs.name }}
+          idrange: ${{ github.event.inputs.idrange }}
+          sampleCode: ${{ github.event.inputs.sampleCode }}
+          sampleSuite: ${{ github.event.inputs.sampleSuite }}
           directCommit: ${{ github.event.inputs.directCommit }}
-  
+
   PostProcess:
     if: always()
     runs-on: [ bc-build ]
@@ -63,5 +84,5 @@ jobs:
         id: PostProcess
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          eventId: "DO0096"
+          eventId: "DO0102"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
