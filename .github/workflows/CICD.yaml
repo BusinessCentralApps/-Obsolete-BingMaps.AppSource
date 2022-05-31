@@ -21,7 +21,7 @@ defaults:
 
 jobs:
   Initialization:
-    runs-on: [ windows-latest ]
+    runs-on: [ bc-build ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -49,7 +49,7 @@ jobs:
           getEnvironments: '*'
 
   CheckForUpdates:
-    runs-on: [ windows-latest ]
+    runs-on: [ bc-build ]
     needs: [ Initialization ]
     steps:
       - name: Checkout
@@ -189,13 +189,10 @@ jobs:
           Project: ${{ matrix.project }}
 
   Deploy:
-    runs-on: [ windows-latest ] 
     needs: [ Initialization, Build ]
     if: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' && needs.Initialization.outputs.environmentCount > 0 }}
-    strategy:
-      matrix:
-        environment: ${{ fromJson(needs.Initialization.outputs.environments) }}
-      fail-fast: false
+    strategy: ${{ fromJson(needs.Initialization.outputs.environments) }}
+    runs-on: ${{ matrix.os }}
     name: Deploy to ${{ matrix.environment }}
     environment:
       name: ${{ matrix.environment }}
@@ -272,7 +269,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ windows-latest ]
+    runs-on: [ bc-build ]
     needs: [ Initialization,  Build, Deploy ]
     steps:
       - name: Checkout
