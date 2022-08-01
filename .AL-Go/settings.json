@@ -3,9 +3,9 @@
     "country":  "us",
     "LicenseFileUrlSecretName":  "LicenseFile",
     "VersioningStrategy":  16,
-    "KeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
-    "KeyVaultCertificatePasswordSecretName":  "KeyVaultCertificatePassword",
-    "KeyVaultClientIdSecretName":  "KeyVaultClientId",
+    "xKeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
+    "xKeyVaultCertificatePasswordSecretName":  "KeyVaultCertificatePassword",
+    "xKeyVaultClientIdSecretName":  "KeyVaultClientId",
     "CodeSignCertificateUrlSecretName":  "CodeSignCertificateUrl",
     "CodeSignCertificatePasswordSecretName":  "CodeSignCertificatePassword",
     "AppSourceCopMandatoryAffixes":  [
