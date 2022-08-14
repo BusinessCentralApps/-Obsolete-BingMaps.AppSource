@@ -69,16 +69,12 @@ jobs:
           if ($env:AppSourceContext) {
             $deliveryTargets += @("AppSource")
           }
-        if ($settings.type -eq "AppSource App") {
-            $deliveryTargets += @("AppSource")
-        }
-        $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
-        Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
-        Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
-        Write-Host "::set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
-        Write-Host "set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
-        Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
-    }
+          $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
+          Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
+          Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
+          Write-Host "::set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
+          Write-Host "set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
+          Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
 
   CheckForUpdates:
     runs-on: [ bc-build ]
