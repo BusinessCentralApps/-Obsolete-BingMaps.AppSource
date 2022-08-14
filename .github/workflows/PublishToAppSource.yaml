@@ -1,0 +1,79 @@
+﻿name: Publish To AppSource
+
+on:
+  workflow_dispatch:
+    inputs:
+      appVersion:
+        description: App version to deliver to AppSource (current, prerelease, draft, latest or version number)
+        required: false
+        default: 'current'
+
+permissions:
+  contents: read
+  actions: read
+
+defaults:
+  run:
+    shell: PowerShell
+
+jobs:
+  Initialization:
+    runs-on: [ bc-build ]
+    outputs:
+      telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Initialize the workflow
+        id: init
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        with:
+          eventId: "DO0103"
+
+  Deliver:
+    needs: [ Initialization ]
+    runs-on: [ bc-build ]
+    name: Deliver to AppSource
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Read settings
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        with:
+          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+
+      - name: Read secrets
+        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        env:
+          secrets: ${{ toJson(secrets) }}
+        with:
+          settingsJson: ${{ env.Settings }}
+          secrets: 'AppSourceContext'
+
+      - name: Deliver
+        uses: freddydk/AL-Go-Actions/Deliver@main
+        env:
+          deliveryContext: '${{ env.AppSourceContext }}'
+        with:
+          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+          type: 'Publish'
+          projects: '${{ secrets.Projects }}'
+          deliveryTarget: 'AppSource'
+          artifacts: ${{ github.event.inputs.appVersion }}
+
+  PostProcess:
+    if: always()
+    runs-on: [ bc-build ]
+    needs: [ Initialization, Deliver ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Finalize the workflow
+        id: PostProcess
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
+        with:
+          eventId: "DO0103"
+          telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
