@@ -324,7 +324,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: 'StorageContext,AppSourceContext'
+          secrets: '${{ matrix.deliveryTarget }}Context'
 
       - name: DeliveryContext
         id: deliveryContext
