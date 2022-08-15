@@ -63,12 +63,6 @@ jobs:
         id: DetermineDeliveryTargets
         run: |
           $deliveryTargets = @()
-          if ($env:StorageContext) {
-            $deliveryTargets += @("Storage")
-          }
-          if ($env:AppSourceContext) {
-            $deliveryTargets += @("AppSource")
-          }
           $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
           Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
           Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
@@ -297,10 +291,54 @@ jobs:
           environmentName: '${{ steps.authContext.outputs.environmentName }}'
           artifacts: '${{ github.workspace }}\artifacts'
 
+  Deliver:
+    needs: [ Initialization, Build ]
+    if: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' && needs.Initialization.outputs.deliveryTargetCount > 0 }}
+    strategy: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
+    runs-on: ${{ matrix.os }}
+    name: Deliver to ${{ matrix.deliveryTarget }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: '${{ github.workspace }}\artifacts'
+
+      - name: Read settings
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
+
+      - name: Read secrets
+        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        env:
+          secrets: ${{ toJson(secrets) }}
+        with:
+          settingsJson: ${{ env.Settings }}
+          secrets: 'StorageContext','AppSourceContext'
+
+      - name: DeliveryContext
+        id: deliveryContext
+        run: |
+          $contextName = '${{ matrix.deliveryTarget }}Context'
+          $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
+          Write-Host "::set-output name=deliveryContext::$deliveryContext"
+          Write-Host "set-output name=deliveryContext::$deliveryContext"
+
+      - name: Deliver
+        uses: freddydk/AL-Go-Actions/Deliver@main
+        env:
+          deliveryContext: '${{ steps.deliveryContext.outputs.deliveryContext }}'
+        with:
+          type: 'CD'
+          projects: '${{ secrets.Projects }}'
+          deliveryTarget: '${{ matrix.deliveryContext }}'
+          artifacts: '${{ github.workspace }}\artifacts'
+
   PostProcess:
     if: always()
     runs-on: [ bc-build ]
-    needs: [ Initialization,  Build, Deploy ]
+    needs: [ Initialization,  Build, Deploy, Deliver ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
