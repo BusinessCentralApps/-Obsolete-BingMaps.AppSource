@@ -70,6 +70,7 @@ jobs:
             $deliveryTargets += @("AppSource")
           }
           $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
+          if ($deliveryTargets.Count -lt 2) { $deliveryTargetsJson = "[$($deliveryTargetsJson)]" }
           Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
           Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
           Write-Host "::set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
