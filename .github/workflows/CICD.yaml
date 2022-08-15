@@ -300,8 +300,11 @@ jobs:
   Deliver:
     needs: [ Initialization, Build ]
     if: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' && needs.Initialization.outputs.deliveryTargetCount > 0 }}
-    strategy: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
-    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        deliveryTarget: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
+      fail-fast: false
+    runs-on: 'bc-build'
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Checkout
@@ -338,13 +341,13 @@ jobs:
         with:
           type: 'CD'
           projects: '${{ secrets.Projects }}'
-          deliveryTarget: '${{ matrix.deliveryContext }}'
+          deliveryTarget: '${{ matrix.deliveryTarget }}'
           artifacts: '${{ github.workspace }}\artifacts'
 
   PostProcess:
     if: always()
     runs-on: [ bc-build ]
-    needs: [ Initialization,  Build, Deploy, Deliver ]
+    needs: [ Initialization, Build, Deploy, Deliver ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
