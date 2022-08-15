@@ -51,10 +51,24 @@ jobs:
           getProjects: 'Y'
           getEnvironments: '*'
 
+      - name: Read secrets
+        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        env:
+          secrets: ${{ toJson(secrets) }}
+        with:
+          settingsJson: ${{ env.Settings }}
+          secrets: 'storageContext,AppSourceContext'
+
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
         run: |
           $deliveryTargets = @()
+          if ($env:StorageContext) {
+            $deliveryTargets += @("Storage")
+          }
+          if ($env:AppSourceContext) {
+            $deliveryTargets += @("AppSource")
+          }
           $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
           Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
           Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
@@ -307,7 +321,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: 'StorageContext','AppSourceContext'
+          secrets: 'StorageContext,AppSourceContext'
 
       - name: DeliveryContext
         id: deliveryContext
