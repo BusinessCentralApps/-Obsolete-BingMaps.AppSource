@@ -11,6 +11,7 @@
     "AppSourceCopMandatoryAffixes":  [
                                          "BingMaps"
                                      ],
+    "AppSourceProductId":  "5fbe0803-a545-4504-b41a-d9d158112360",
     "obsoleteTagMinAllowedMajorMinor":  "20.0",
     "appFolders":  [
                        "BingMaps"
