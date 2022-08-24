@@ -57,7 +57,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: 'storageContext,AppSourceContext'
+          secrets: 'StorageContext,AppSourceContext'
 
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
