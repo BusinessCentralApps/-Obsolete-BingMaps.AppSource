@@ -57,7 +57,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: 'storageContext,AppSourceContext'
+          secrets: 'StorageContext,AppSourceContext'
 
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
@@ -66,8 +66,10 @@ jobs:
           if ($env:StorageContext) {
             $deliveryTargets += @("Storage")
           }
-          if ($env:AppSourceContext) {
-            $deliveryTargets += @("AppSource")
+          if ($settings.type -eq "AppSource App") {
+            if ($env:AppSourceContext) {
+              $deliveryTargets += @("AppSource")
+            }
           }
           $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
           if ($deliveryTargets.Count -lt 2) { $deliveryTargetsJson = "[$($deliveryTargetsJson)]" }
@@ -305,7 +307,7 @@ jobs:
       matrix:
         deliveryTarget: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
       fail-fast: false
-    runs-on: 'bc-build'
+    runs-on: ${{ matrix.os }}
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Checkout
