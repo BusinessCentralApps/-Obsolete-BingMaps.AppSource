@@ -16,7 +16,7 @@ page 70074122 "BingMaps Setup"
         {
             group(Welcome)
             {
-                Caption = 'Welcome to the BingMaps Integration App.';
+                Caption = 'Welcome to the BingMaps Integration App';
                 InstructionalText = 'In order to use the App, you will need to specify a BingMaps Key. Press the AssistEdit button to get assistance on how to create your own key.';
             }
             group(General)
