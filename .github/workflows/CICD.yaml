@@ -57,7 +57,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: 'storageContext,AppSourceContext'
+          secrets: 'StorageContext','AppSourceContext'
 
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
@@ -69,13 +69,16 @@ jobs:
           if ($env:AppSourceContext) {
             $deliveryTargets += @("AppSource")
           }
-          $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
-          if ($deliveryTargets.Count -lt 2) { $deliveryTargetsJson = "[$($deliveryTargetsJson)]" }
-          Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
-          Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
-          Write-Host "::set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
-          Write-Host "set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
-          Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
+        if ($settings.type -eq "AppSource App") {
+            $deliveryTargets += @("AppSource")
+        }
+        $deliveryTargetsJson = $deliveryTargets | ConvertTo-Json -Depth 99 -compress
+        Write-Host "::set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
+        Write-Host "set-output name=DeliveryTargetsJson::$deliveryTargetsJson"
+        Write-Host "::set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
+        Write-Host "set-output name=DeliveryTargetCount::$($deliveryTargets.Count)"
+        Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
+    }
 
   CheckForUpdates:
     runs-on: [ bc-build ]
@@ -301,11 +304,8 @@ jobs:
   Deliver:
     needs: [ Initialization, Build ]
     if: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' && needs.Initialization.outputs.deliveryTargetCount > 0 }}
-    strategy:
-      matrix:
-        deliveryTarget: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
-      fail-fast: false
-    runs-on: 'bc-build'
+    strategy: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
+    runs-on: ${{ matrix.os }}
     name: Deliver to ${{ matrix.deliveryTarget }}
     steps:
       - name: Checkout
@@ -325,7 +325,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: '${{ matrix.deliveryTarget }}Context'
+          secrets: 'StorageContext','AppSourceContext'
 
       - name: DeliveryContext
         id: deliveryContext
@@ -342,13 +342,13 @@ jobs:
         with:
           type: 'CD'
           projects: '${{ secrets.Projects }}'
-          deliveryTarget: '${{ matrix.deliveryTarget }}'
+          deliveryTarget: '${{ matrix.deliveryContext }}'
           artifacts: '${{ github.workspace }}\artifacts'
 
   PostProcess:
     if: always()
     runs-on: [ bc-build ]
-    needs: [ Initialization, Build, Deploy, Deliver ]
+    needs: [ Initialization,  Build, Deploy, Deliver ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
