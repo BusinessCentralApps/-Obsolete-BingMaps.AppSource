@@ -56,10 +56,18 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'AppSourceContext'
 
+      - name: DeliveryContext
+        id: deliveryContext
+        run: |
+          $contextName = 'AppSourceContext'
+          $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
+          Write-Host "::set-output name=deliveryContext::$deliveryContext"
+          Write-Host "set-output name=deliveryContext::$deliveryContext"
+
       - name: Deliver
         uses: freddydk/AL-Go-Actions/Deliver@main
         env:
-          deliveryContext: '${{ env.AppSourceContext }}'
+          deliveryContext: '${{ steps.deliveryContext.outputs.deliveryContext }}'
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           type: 'Publish'
