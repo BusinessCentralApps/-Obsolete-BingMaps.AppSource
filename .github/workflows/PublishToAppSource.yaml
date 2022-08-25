@@ -7,6 +7,10 @@ on:
         description: App version to deliver to AppSource (current, prerelease, draft, latest or version number)
         required: false
         default: 'current'
+      GoLive:
+        description: Promote AppSource App to go live if it passes technical validation? (Y/N)
+        required: false
+        default: 'N'
 
 permissions:
   contents: read
@@ -62,6 +66,7 @@ jobs:
           projects: '${{ secrets.Projects }}'
           deliveryTarget: 'AppSource'
           artifacts: ${{ github.event.inputs.appVersion }}
+          goLive: ${{ github.event.inputs.goLive }}
 
   PostProcess:
     if: always()
