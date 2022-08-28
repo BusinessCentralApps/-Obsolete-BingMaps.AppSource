@@ -138,6 +138,9 @@ jobs:
       matrix: ${{ fromJson(needs.CreateRelease.outputs.artifacts) }}
       fail-fast: true
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
