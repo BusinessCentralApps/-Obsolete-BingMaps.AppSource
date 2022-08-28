@@ -174,11 +174,19 @@ jobs:
           asset_name: '${{ matrix.name }}.zip'
           asset_content_type: application/zip
 
+      - name: DeliveryContext
+        id: deliveryContext
+        run: |
+          $contextName = 'StorageContext'
+          $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
+          Write-Host "::set-output name=deliveryContext::$deliveryContext"
+          Write-Host "set-output name=deliveryContext::$deliveryContext"
+
       - name: Deliver
         uses: freddydk/AL-Go-Actions/Deliver@main
         if: ${{ env.StorageContext }}
         env:
-          deliveryContext: '${{ env.StorageContext }}'
+          deliveryContext: '${{ steps.deliveryContext.outputs.deliveryContext }}'
         with:
           type: 'Publish'
           projects: '*'
