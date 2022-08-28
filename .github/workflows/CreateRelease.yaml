@@ -101,7 +101,9 @@ jobs:
           }
           $include = @()
           $allArtifacts.artifacts | Where-Object { $_.name -like "*Apps-$($artifactsVersion)" } | ForEach-Object {
-            $include += $( [ordered]@{ "name" = $_.name; "url" = $_.archive_download_url } )
+            $atype = $_.name.SubString(0,$_.name.Length-$artifactsVersion.Length-1)
+            $atype = $atype.SubString($atype.LastIndexOf('-')+1)
+            $include += $( [ordered]@{ "name" = $_.name; "url" = $_.archive_download_url; "atype" = $atype } )
           }
           if ($include.Count -eq 0) {
             Write-Host "::Error::No artifacts found"
@@ -176,6 +178,7 @@ jobs:
 
       - name: DeliveryContext
         id: deliveryContext
+        if: ${{ env.StorageContext }}
         run: |
           $contextName = 'StorageContext'
           $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
@@ -192,6 +195,7 @@ jobs:
           projects: '*'
           deliveryTarget: 'Storage'
           artifacts: '${{ github.event.inputs.appVersion }}'
+          atypes: ${{ matrix.atype }}
 
   CreateReleaseBranch:
     if: ${{ github.event.inputs.createReleaseBranch=='Y' }}
