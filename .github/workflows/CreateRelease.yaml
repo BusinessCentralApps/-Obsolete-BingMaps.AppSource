@@ -171,70 +171,16 @@ jobs:
           asset_name: '${{ matrix.name }}.zip'
           asset_content_type: application/zip
 
-      - name: Publish To Storage
-        id: PublishToStorage
-        run: |
-          if ($env:StorageContext) {
-              try {
-                  $errorActionPreference = "STOP"
-                  if (get-command New-AzureStorageContext -ErrorAction SilentlyContinue) {
-                      Write-Host "Using Azure.Storage PowerShell module"
-                      Disable-AzureDataCollection
-                  }
-                  else {
-                      if (!(get-command New-AzStorageContext -ErrorAction SilentlyContinue)) {
-                          OutputError -message "When publishing to storage account, the build agent needs to have either the Azure.Storage or the Az.Storage PowerShell module installed."
-                          exit
-                      }
-                      Write-Host "Using Az.Storage PowerShell module"
-                      Set-Alias -Name New-AzureStorageContext -Value New-AzStorageContext
-                      Set-Alias -Name Get-AzureStorageContainer -Value Get-AzStorageContainer
-                      Set-Alias -Name Set-AzureStorageBlobContent -Value Set-AzStorageBlobContent
-                  }
-
-                  $storageContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($env:StorageContext))
-                  $storageAccount = $StorageContext | ConvertFrom-Json
-                  if ($storageAccount.PSObject.Properties.Name -eq "sastoken") {
-                      $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken
-                  }
-                  else {
-                      $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -StorageAccountKey $storageAccount.StorageAccountKey
-                  }
-
-                  $name = '${{ matrix.name }}'
-                  $type = ""
-                  if ($name -like '*-main-Apps-*') {
-                      $idx = $name.indexOf('-main-Apps-')
-                      $version = $name.SubString($idx+'-main-Apps-'.Length)
-                      $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
-                      $type = 'Apps'
-                  }
-                  elseif ($name -like '*-main-TestApps-*') {
-                      $idx = $name.indexOf('-main-TestApps-')
-                      $version = $name.SubString($idx+'-main-TestApps-'.Length)
-                      $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
-                      $type = 'TestApps'
-                  }
-
-                  $storageContainerName = $storageAccount.ContainerName.ToLowerInvariant().replace('{project}',$projectName).ToLowerInvariant()
-                  Get-AzureStorageContainer -Context $storageContext -name $storageContainerName | Out-Null
-                  $storageBlobName = $storageAccount.BlobName.ToLowerInvariant()
-                  Write-Host "Storage Context OK"
-
-                  if ($type) {
-                      $version, "latest" | ForEach-Object {
-                          $blob = $storageBlobName.replace('{project}',$projectName).replace('{version}',$_).replace('{type}',$type).ToLowerInvariant()
-                          Write-Host "Publishing $blob to $storageContainerName"
-                          Set-AzureStorageBlobContent -Context $storageContext -Container $storageContainerName -File '${{ matrix.name }}.zip' -blob $blob -Force
-                      }
-                  }
-              }
-              catch {
-                Write-Host $_.Exception.Message
-                  Write-Host "::Error::StorageContext secret is malformed. Needs to be formatted as Json, containing StorageAccountName, ContainerName, BlobName and sastoken or storageAccountKey, which points to an existing container in a storage account."
-                  exit 1
-              }
-          }
+      - name: Deliver
+        uses: freddydk/AL-Go-Actions/Deliver@main
+        if: ${{ env.StorageContext }}
+        env:
+          deliveryContext: '${{ env.StorageContext }}'
+        with:
+          type: 'Publish'
+          projects: '*'
+          deliveryTarget: 'Storage'
+          artifacts: '${{ github.event.inputs.appVersion }}'
 
   CreateReleaseBranch:
     if: ${{ github.event.inputs.createReleaseBranch=='Y' }}
