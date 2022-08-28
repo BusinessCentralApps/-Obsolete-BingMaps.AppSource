@@ -205,13 +205,13 @@ jobs:
                   $type = ""
                   if ($name -like '*-main-Apps-*') {
                       $idx = $name.indexOf('-main-Apps-')
-                      $version = $name.SubString($idx+6)
+                      $version = $name.SubString($idx+'-main-Apps-'.Length)
                       $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
                       $type = 'Apps'
                   }
                   elseif ($name -like '*-main-TestApps-*') {
                       $idx = $name.indexOf('-main-TestApps-')
-                      $version = $name.SubString($idx+10)
+                      $version = $name.SubString($idx+'-main-TestApps-'.Length)
                       $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
                       $type = 'TestApps'
                   }
