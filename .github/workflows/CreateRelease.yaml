@@ -176,6 +176,7 @@ jobs:
         run: |
           if ($env:StorageContext) {
               try {
+                  $errorActionPreference = "STOP"
                   if (get-command New-AzureStorageContext -ErrorAction SilentlyContinue) {
                       Write-Host "Using Azure.Storage PowerShell module"
                       Disable-AzureDataCollection
@@ -192,7 +193,6 @@ jobs:
                   }
 
                   $storageContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($env:StorageContext))
-
                   $storageAccount = $StorageContext | ConvertFrom-Json
                   if ($storageAccount.PSObject.Properties.Name -eq "sastoken") {
                       $storageContext = New-AzureStorageContext -StorageAccountName $storageAccount.StorageAccountName -SasToken $storageAccount.sastoken
@@ -204,12 +204,12 @@ jobs:
                   $name = '${{ matrix.name }}'
                   $type = ""
                   if ($name -like '*-Apps-*') {
-                      $idx = $name.indexOf('-Apps-')
+                      $idx = $name.indexOf('-main-Apps-')
                       $version = $name.SubString($idx+6)
                       $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
                       $type = 'Apps'
                   }
-                  elseif ($name -like '*-TestApps-*') {
+                  elseif ($name -like '*-main-TestApps-*') {
                       $idx = $name.indexOf('-TestApps-')
                       $version = $name.SubString($idx+10)
                       $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
