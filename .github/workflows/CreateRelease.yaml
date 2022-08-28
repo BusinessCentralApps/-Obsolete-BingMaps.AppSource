@@ -203,14 +203,14 @@ jobs:
 
                   $name = '${{ matrix.name }}'
                   $type = ""
-                  if ($name -like '*-Apps-*') {
+                  if ($name -like '*-main-Apps-*') {
                       $idx = $name.indexOf('-main-Apps-')
                       $version = $name.SubString($idx+6)
                       $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
                       $type = 'Apps'
                   }
                   elseif ($name -like '*-main-TestApps-*') {
-                      $idx = $name.indexOf('-TestApps-')
+                      $idx = $name.indexOf('-main-TestApps-')
                       $version = $name.SubString($idx+10)
                       $projectName = $name.SubString(0,$idx) -replace "[^a-z0-9]", "-"
                       $type = 'TestApps'
