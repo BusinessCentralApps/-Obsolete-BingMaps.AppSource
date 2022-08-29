@@ -7,10 +7,6 @@ on:
         description: App version to deliver to AppSource (current, prerelease, draft, latest or version number)
         required: false
         default: 'current'
-      GoLive:
-        description: Promote AppSource App to go live if it passes technical validation? (Y/N)
-        required: false
-        default: 'N'
 
 permissions:
   contents: read
@@ -56,25 +52,16 @@ jobs:
           settingsJson: ${{ env.Settings }}
           secrets: 'AppSourceContext'
 
-      - name: DeliveryContext
-        id: deliveryContext
-        run: |
-          $contextName = 'AppSourceContext'
-          $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
-          Write-Host "::set-output name=deliveryContext::$deliveryContext"
-          Write-Host "set-output name=deliveryContext::$deliveryContext"
-
       - name: Deliver
         uses: freddydk/AL-Go-Actions/Deliver@main
         env:
-          deliveryContext: '${{ steps.deliveryContext.outputs.deliveryContext }}'
+          deliveryContext: '${{ env.AppSourceContext }}'
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           type: 'Publish'
           projects: '${{ secrets.Projects }}'
           deliveryTarget: 'AppSource'
           artifacts: ${{ github.event.inputs.appVersion }}
-          goLive: ${{ github.event.inputs.goLive }}
 
   PostProcess:
     if: always()
