@@ -19,7 +19,8 @@
                        "BingMaps"
                    ],
     "testFolders":  [
-                        "BingMaps.Test"
+                        "BingMaps.Test",
+                        "Test.Test"
                     ],
     "RepoVersion":  "3.1"
 }
