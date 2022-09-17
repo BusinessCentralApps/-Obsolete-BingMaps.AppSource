@@ -24,6 +24,9 @@ jobs:
     runs-on: [ bc-build ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+      settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
+      environments: ${{ steps.ReadSettings.outputs.EnvironmentsJson }}
+      environmentCount: ${{ steps.ReadSettings.outputs.EnvironmentCount }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,29 +37,18 @@ jobs:
         with:
           eventId: "DO0097"
 
-  Analyze:
-    runs-on: [ bc-build ]
-    needs: [ Initialization ]
-    outputs:
-      settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
-      environments: ${{ steps.ReadSettings.outputs.EnvironmentsJson }}
-      environmentCount: ${{ steps.ReadSettings.outputs.EnvironmentCount }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Read settings
         id: ReadSettings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
-          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
-          getEnvironments: '${{ github.event.inputs.environmentName }}'
+          parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
+          getEnvironments: ${{ github.event.inputs.environmentName }}
           includeProduction: 'Y'
 
   Deploy:
-    needs: [ Analyze ]
-    if: ${{ needs.Analyze.outputs.environmentCount > 0 }}
-    strategy: ${{ fromJson(needs.Analyze.outputs.environments) }}
+    needs: [ Initialization ]
+    if: ${{ needs.Initialization.outputs.environmentCount > 0 }}
+    strategy: ${{ fromJson(needs.Initialization.outputs.environments) }}
     runs-on: ${{ fromJson(matrix.os) }}
     name: Deploy to ${{ matrix.environment }}
     environment:
@@ -117,8 +109,11 @@ jobs:
           if (-not $projects) {
             $projects = [System.Environment]::GetEnvironmentVariable("$($envName)_Projects")
             if (-not $projects) {
-              $projects = [System.Environment]::GetEnvironmentVariable('projects')
+              $projects = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('projects')))
             }
+          }
+          if ($projects -eq '') {
+            $projects = '*'
           }
 
           Write-Host "::set-output name=authContext::$authContext"
@@ -131,18 +126,18 @@ jobs:
       - name: Deploy
         uses: freddydk/AL-Go-Actions/Deploy@main
         env:
-          authContext: '${{ steps.authContext.outputs.authContext }}'
+          authContext: ${{ steps.authContext.outputs.authContext }}
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           type: 'Publish'
-          projects: '${{ steps.authContext.outputs.projects }}'
-          environmentName: '${{ steps.authContext.outputs.environmentName }}'
+          projects: ${{ steps.authContext.outputs.projects }}
+          environmentName: ${{ steps.authContext.outputs.environmentName }}
           artifacts: ${{ github.event.inputs.appVersion }}
 
   PostProcess:
     if: always()
     runs-on: [ bc-build ]
-    needs: [ Initialization, Analyze, Deploy ]
+    needs: [ Initialization, Deploy ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2

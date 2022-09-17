@@ -70,8 +70,8 @@ jobs:
           deliveryContext: '${{ steps.deliveryContext.outputs.deliveryContext }}'
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
-          type: 'Publish'
-          projects: '${{ secrets.Projects }}'
+          type: 'Release'
+          projects: '*'
           deliveryTarget: 'AppSource'
           artifacts: ${{ github.event.inputs.appVersion }}
           goLive: ${{ github.event.inputs.goLive }}
