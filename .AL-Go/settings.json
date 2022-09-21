@@ -6,8 +6,8 @@
     "xKeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
     "xKeyVaultCertificatePasswordSecretName":  "KeyVaultCertificatePassword",
     "xKeyVaultClientIdSecretName":  "KeyVaultClientId",
-    "CodeSignCertificateUrlSecretName":  "CodeSignCertificateUrl",
-    "CodeSignCertificatePasswordSecretName":  "CodeSignCertificatePassword",
+    "xCodeSignCertificateUrlSecretName":  "CodeSignCertificateUrl",
+    "xCodeSignCertificatePasswordSecretName":  "CodeSignCertificatePassword",
     "AppSourceCopMandatoryAffixes":  [
                                          "BingMaps"
                                      ],
