@@ -2,7 +2,7 @@ table 70074120 "BingMaps Customer"
 {
     fields
     {
-        field(70074120; "No."; Code[30])
+        field(70074120; "No."; Code[20])
         {
             DataClassification = CustomerContent;
         }
