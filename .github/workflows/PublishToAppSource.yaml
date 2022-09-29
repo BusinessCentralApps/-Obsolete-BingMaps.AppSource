@@ -22,7 +22,7 @@ defaults:
 
 jobs:
   Initialization:
-    runs-on: [ bc-build ]
+    runs-on: [ windows-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
@@ -37,7 +37,7 @@ jobs:
 
   Deliver:
     needs: [ Initialization ]
-    runs-on: [ bc-build ]
+    runs-on: [ windows-latest ]
     name: Deliver to AppSource
     steps:
       - name: Checkout
@@ -78,7 +78,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ bc-build ]
+    runs-on: [ windows-latest ]
     needs: [ Initialization, Deliver ]
     steps:
       - name: Checkout
