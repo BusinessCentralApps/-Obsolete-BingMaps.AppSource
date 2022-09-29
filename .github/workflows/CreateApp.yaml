@@ -35,7 +35,7 @@ defaults:
 
 jobs:
   CreateApp:
-    runs-on: [ bc-build ]
+    runs-on: [ windows-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
