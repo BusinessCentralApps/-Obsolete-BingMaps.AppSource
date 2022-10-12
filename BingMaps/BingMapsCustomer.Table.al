@@ -33,6 +33,10 @@ table 70074120 "BingMaps Customer"
         {
             DataClassification = CustomerContent;
         }
+        field(70074126; "Useless field"; Text[200])
+        {
+            DataClassification = CustomerContent;
+        }
 
     }
 
