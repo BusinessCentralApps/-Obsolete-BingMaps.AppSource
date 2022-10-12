@@ -89,6 +89,7 @@ jobs:
       - name: Analyze Artifacts
         id: analyzeartifacts
         run: |
+          $ErrorActionPreference = "STOP"
           $projects = '${{ steps.ReadSettings.outputs.ProjectsJson }}' | ConvertFrom-Json
           $projects | out-host
           $include = @()
@@ -168,10 +169,11 @@ jobs:
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
-          secrets: 'StorageContext'
+          secrets: 'NuGetContext,StorageContext'
 
       - name: Download artifact
         run: |
+          $ErrorActionPreference = "STOP"
           Write-Host "Downloading artifact ${{ matrix.name}}"
           $headers = @{ 
               "Authorization" = "token ${{ github.token }}"
@@ -189,26 +191,53 @@ jobs:
           asset_name: '${{ matrix.name }}.zip'
           asset_content_type: application/zip
 
-      - name: DeliveryContext
-        id: deliveryContext
+      - name: NuGetContext
+        id: nuGetContext
+        if: ${{ env.NuGetContext }}
+        run: |
+          $ErrorActionPreference = "STOP"
+          $nuGetContext = ''
+          if ('${{ matrix.atype }}' -eq 'Apps') {
+            $nuGetContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('NuGetContext')))
+          }
+          Write-Host "::set-output name=nuGetContext::$nuGetContext"
+          Write-Host "set-output name=nuGetContext::$nuGetContext"
+
+      - name: Deliver to NuGet
+        uses: freddydk/AL-Go-Actions/Deliver@main
+        if: ${{ steps.nuGetContext.outputs.nuGetContext }}
+        env:
+          deliveryContext: ${{ steps.nuGetContext.outputs.nuGetContext }}
+        with:
+          type: 'Release'
+          projects: ${{ matrix.project }}
+          deliveryTarget: 'NuGet'
+          artifacts: ${{ github.event.inputs.appVersion }}
+          atypes: 'Apps,TestApps'
+
+      - name: StorageContext
+        id: storageContext
         if: ${{ env.StorageContext }}
         run: |
-          $contextName = 'StorageContext'
-          $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
-          Write-Host "::set-output name=deliveryContext::$deliveryContext"
-          Write-Host "set-output name=deliveryContext::$deliveryContext"
+          $ErrorActionPreference = "STOP"
+          $storageContext = ''
+          if ('${{ matrix.atype }}' -eq 'Apps') {
+            $storageContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('StorageContext')))
+          }
+          Write-Host "::set-output name=storageContext::$storageContext"
+          Write-Host "set-output name=storageContext::$storageContext"
 
-      - name: Deliver
+      - name: Deliver to Storage
         uses: freddydk/AL-Go-Actions/Deliver@main
-        if: ${{ env.StorageContext }}
+        if: ${{ steps.storageContext.outputs.storageContext }}
         env:
-          deliveryContext: ${{ steps.deliveryContext.outputs.deliveryContext }}
+          deliveryContext: ${{ steps.storageContext.outputs.storageContext }}
         with:
           type: 'Release'
           projects: ${{ matrix.project }}
           deliveryTarget: 'Storage'
           artifacts: ${{ github.event.inputs.appVersion }}
-          atypes: ${{ matrix.atype }}
+          atypes: 'Apps,TestApps,Dependencies'
 
   CreateReleaseBranch:
     if: ${{ github.event.inputs.createReleaseBranch=='Y' }}
@@ -220,6 +249,7 @@ jobs:
 
       - name: Create Release Branch
         run: |
+          $ErrorActionPreference = "STOP"
           git checkout -b release/${{ github.event.inputs.tag }}
           git config user.name ${{ github.actor}}
           git config user.email ${{ github.actor}}@users.noreply.github.com

@@ -60,6 +60,7 @@ jobs:
       - name: EnvName
         id: envName
         run: |
+          $ErrorActionPreference = "STOP"
           $envName = '${{ matrix.environment }}'.split(' ')[0]
           Write-Host "::set-output name=envName::$envName"
 
@@ -77,6 +78,7 @@ jobs:
       - name: AuthContext
         id: authContext
         run: |
+          $ErrorActionPreference = "STOP"
           $envName = '${{ steps.envName.outputs.envName }}'
           $authContext = $null
           "$($envName)-AuthContext", "$($envName)_AuthContext", "AuthContext" | ForEach-Object {

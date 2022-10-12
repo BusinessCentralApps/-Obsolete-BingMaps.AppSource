@@ -59,6 +59,7 @@ jobs:
       - name: DeliveryContext
         id: deliveryContext
         run: |
+          $ErrorActionPreference = "STOP"
           $contextName = 'AppSourceContext'
           $deliveryContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable($contextName)))
           Write-Host "::set-output name=deliveryContext::$deliveryContext"
