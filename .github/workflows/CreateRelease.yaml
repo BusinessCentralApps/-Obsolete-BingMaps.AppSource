@@ -54,7 +54,7 @@ jobs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Initialize the workflow
         id: init
@@ -70,7 +70,7 @@ jobs:
       upload_url: ${{ steps.createrelease.outputs.upload_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Read settings
         id: ReadSettings
@@ -125,8 +125,8 @@ jobs:
           }
           $artifacts = @{ "include" = $include }
           $artifactsJson = $artifacts | ConvertTo-Json -compress
-          Write-Host "::set-output name=artifacts::$artifactsJson"
-          Write-Host "set-output name=artifacts::$artifactsJson"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "artifacts=$artifactsJson"
+          Write-Host "artifacts=$artifactsJson"
 
       - name: Prepare release notes
         id: createreleasenotes
@@ -155,7 +155,7 @@ jobs:
       fail-fast: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -200,8 +200,8 @@ jobs:
           if ('${{ matrix.atype }}' -eq 'Apps') {
             $nuGetContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('NuGetContext')))
           }
-          Write-Host "::set-output name=nuGetContext::$nuGetContext"
-          Write-Host "set-output name=nuGetContext::$nuGetContext"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetContext=$nuGetContext"
+          Write-Host "nuGetContext=$nuGetContext"
 
       - name: Deliver to NuGet
         uses: freddydk/AL-Go-Actions/Deliver@main
@@ -224,8 +224,8 @@ jobs:
           if ('${{ matrix.atype }}' -eq 'Apps') {
             $storageContext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String([System.Environment]::GetEnvironmentVariable('StorageContext')))
           }
-          Write-Host "::set-output name=storageContext::$storageContext"
-          Write-Host "set-output name=storageContext::$storageContext"
+          Write-Host "Add-Content -Path $env:GITHUB_OUTPUT -Value "storageContext=$storageContext"
+          Write-Host "storageContext=$storageContext"
 
       - name: Deliver to Storage
         uses: freddydk/AL-Go-Actions/Deliver@main
@@ -245,7 +245,7 @@ jobs:
     needs: [ Initialization, CreateRelease, UploadArtifacts ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Create Release Branch
         run: |
@@ -274,7 +274,7 @@ jobs:
     needs: [ Initialization, CreateRelease, UploadArtifacts, CreateReleaseBranch, UpdateVersionNumber ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Finalize the workflow
         id: PostProcess

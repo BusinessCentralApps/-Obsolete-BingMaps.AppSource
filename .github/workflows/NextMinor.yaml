@@ -23,7 +23,7 @@ jobs:
       githubRunner: ${{ steps.ReadSettings.outputs.GitHubRunnerJson }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Initialize the workflow
         id: init
@@ -53,7 +53,7 @@ jobs:
       BuildOutputArtifactsName: ${{ steps.calculateArtifactNames.outputs.BuildOutputArtifactsName }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
@@ -89,12 +89,12 @@ jobs:
           'TestResults','BcptTestResults','BuildOutput' | ForEach-Object {
             $name = "$($_)ArtifactsName"
             $value = "$($project.Replace('\','_'))-$_-NextMinor-$([DateTime]::UtcNow.ToString('yyyyMMdd'))"
-            Write-Host "::set-output name=$name::$value"
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "$name=$value"
             Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
           }
 
       - name: Publish artifacts - build output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/BuildOutput.txt',matrix.project)) != '')
         with:
           name: ${{ env.buildOutputArtifactsName }}
@@ -102,7 +102,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish artifacts - test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/TestResults.xml',matrix.project)) != '')
         with:
           name: ${{ env.testResultsArtifactsName }}
@@ -110,7 +110,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Publish artifacts - bcpt test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: (success() || failure()) && (hashFiles(format('{0}/bcptTestResults.json',matrix.project)) != '')
         with:
           name: ${{ env.bcptTestResultsArtifactsName }}
@@ -130,7 +130,7 @@ jobs:
     needs: [ Initialization, Build ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Finalize the workflow
         id: PostProcess
