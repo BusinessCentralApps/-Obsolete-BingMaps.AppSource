@@ -251,7 +251,7 @@ jobs:
               }
             }
             if ($deleteFile) {
-              if (Test-Path $newPath)) {
+              if (Test-Path $newPath) {
                 Write-Host "Removing $newPath"
                 Remove-Item $newPath -Force
               }
