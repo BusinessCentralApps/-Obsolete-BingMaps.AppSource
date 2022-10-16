@@ -117,6 +117,14 @@ jobs:
           path: '${{ matrix.project }}/bcptTestResults.json'
           if-no-files-found: ignore
 
+      - name: Analyze Test Results
+        id: analyzeTestResults
+        if: success() || failure()
+        uses: freddydk/AL-Go-Actions/AnalyzeTests@main
+        with:
+          parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
+          Project: ${{ matrix.project }}
+
       - name: Cleanup
         if: always()
         uses: freddydk/AL-Go-Actions/PipelineCleanup@main
