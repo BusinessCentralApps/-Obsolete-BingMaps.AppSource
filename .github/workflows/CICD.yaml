@@ -24,6 +24,7 @@ defaults:
 
 jobs:
   Initialization:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: [ windows-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -36,6 +37,9 @@ jobs:
       deliveryTargetCount: ${{ steps.DetermineDeliveryTargets.outputs.DeliveryTargetCount }}
       githubRunner: ${{ steps.ReadSettings.outputs.GitHubRunnerJson }}
       checkRunId: ${{ steps.CreateCheckRun.outputs.checkRunId }}
+      projectDependenciesJson: ${{ steps.ReadSettings.outputs.ProjectDependenciesJson }}
+      buildOrderJson: ${{ steps.ReadSettings.outputs.BuildOrderJson }}
+      buildOrderDepth: ${{ steps.ReadSettings.outputs.BuildOrderDepth }}
     steps:
       - name: Create CI/CD Workflow Check Run
         id: CreateCheckRun
@@ -61,6 +65,70 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: 'Download Pull Request Changes'
+        if: github.event_name == 'workflow_run'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            var run_id = Number('${{ github.event.workflow_run.id }}');
+            var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: run_id
+            });
+            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == 'Pull_Request_Files'
+            })[0];
+            var download = await github.rest.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip'
+            });
+            var fs = require('fs');
+            fs.writeFileSync('.PullRequestChanges.zip', Buffer.from(download.data));
+
+      - name: Apply Pull Request Changes
+        if: github.event_name == 'workflow_run'
+        run: |
+          $ErrorActionPreference = "STOP"
+          $location = (Get-Location).path
+          $prfolder = '.PullRequestChanges'
+          Expand-Archive -Path ".\$prfolder.zip" -DestinationPath ".\$prfolder"
+          Remove-Item -Path ".\$prfolder.zip" -force
+          Get-ChildItem -Path $prfolder -Recurse -File | ForEach-Object {
+            $path = $_.FullName
+            $deleteFile = $path.EndsWith('.REMOVE')
+            if ($deleteFile) {
+              $path = $path.SubString(0,$path.Length-7)
+            }
+            $newPath = $path.Replace("$prfolder\","")
+            $newFolder = [System.IO.Path]::GetDirectoryName($newPath)
+            $extension = [System.IO.Path]::GetExtension($path)
+            $filename = [System.IO.Path]::GetFileName($path)
+            if ('${{ github.event.workflow_run.head_repository.full_name }}' -ne $ENV:GITHUB_REPOSITORY) {
+              if ($extension -eq '.ps1' -or $extension -eq '.yaml' -or $extension -eq '.yml' -or $filename -eq "CODEOWNERS") {
+                throw "Pull Request containing changes to scripts, workflows or CODEOWNERS are not allowed from forks."
+              }
+            }
+            if ($deleteFile) {
+              if (Test-Path $newPath) {
+                Write-Host "Removing $newPath"
+                Remove-Item $newPath -Force
+              }
+              else {
+                Write-Host "$newPath was already deleted"
+              }
+            }
+            else {
+              if (-not (Test-Path $newFolder)) {
+                New-Item $newFolder -ItemType Directory | Out-Null
+              }
+              Write-Host "Copying $path to $newFolder"
+              Copy-Item $path -Destination $newFolder -Force
+            }
+          }
 
       - name: Initialize the workflow
         id: init
@@ -114,6 +182,43 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "DeliveryTargetCount=$($deliveryTargets.Count)"
           Write-Host "DeliveryTargetCount=$($deliveryTargets.Count)"
           Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
+
+      - name: Determine Build Order
+        id: BuildOrder
+        run: |
+          $ErrorActionPreference = "STOP"
+          $projects = '${{ steps.ReadSettings.outputs.ProjectsJson }}' | ConvertFrom-Json
+          $buildOrder = '${{ steps.ReadSettings.outputs.BuildOrderJson }}' | ConvertFrom-Json
+          $depth = ${{ steps.ReadSettings.outputs.BuildOrderDepth }}
+          $workflowDepth = ${{ steps.ReadSettings.outputs.WorkflowDepth }}
+          if ($depth -lt $workflowDepth) {
+            Write-Host "::Error::Project Dependencies depth is $depth. Workflow is only setup for $workflowDepth. You need to Run Update AL-Go System Files to update the workflows"
+            $host.SetShouldExit(1)
+          }
+          $step = $depth
+          $depth..1 | ForEach-Object {
+            $ps = @($buildOrder."$_" | Where-Object { $projects -contains $_ })
+            if ($ps.Count -eq 1) {
+              $projectsJSon = "[$($ps | ConvertTo-Json -compress)]"
+            }
+            else {
+              $projectsJSon = $ps | ConvertTo-Json -compress
+            }
+            if ($ps.Count -gt 0) {
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Json=$projectsJson"
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Count=$($ps.count)"
+              Write-Host "Projects$($step)Json=$projectsJson"
+              Write-Host "Projects$($step)Count=$($ps.count)"
+              $step--
+            }
+          }
+          while ($step -ge 1) {
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Json="
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "Projects$($step)Count=0"
+              Write-Host "Projects$($step)Json="
+              Write-Host "Projects$($step)Count=0"
+              $step--
+          }
 
   CheckForUpdates:
     runs-on: [ windows-latest ]
@@ -204,6 +309,11 @@ jobs:
         with:
           lfs: true
 
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: '${{ github.workspace }}\.dependencies'
+
       - name: 'Download Pull Request Changes'
         if: github.event_name == 'workflow_run'
         uses: actions/github-script@v6
@@ -289,6 +399,7 @@ jobs:
         with:
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           Project: ${{ matrix.project }}
+          ProjectDependenciesJson: ${{ needs.Initialization.outputs.projectDependenciesJson }}
           settingsJson: ${{ env.Settings }}
           SecretsJson: ${{ env.RepoSecrets }}
 
@@ -364,7 +475,7 @@ jobs:
           Project: ${{ matrix.project }}
 
       - name: Update Build Job Check Run
-        if: (always()) && (github.event_name == 'workflow_run')
+        if: always() && github.event_name == 'workflow_run'
         uses: actions/github-script@v6
         env:
           TestResultMD: ${{ steps.analyzeTestResults.outputs.TestResultMD }}
@@ -394,7 +505,7 @@ jobs:
 
   Deploy:
     needs: [ Initialization, Build ]
-    if: ${{ (github.event_name != 'workflow_run') && (github.ref_name == 'main') && (needs.Initialization.outputs.environmentCount > 0) }}
+    if: always() && needs.Build.result == 'Success' && github.event_name != 'workflow_run' && github.ref_name == 'main' && needs.Initialization.outputs.environmentCount > 0
     strategy: ${{ fromJson(needs.Initialization.outputs.environments) }}
     runs-on: ${{ fromJson(matrix.os) }}
     name: Deploy to ${{ matrix.environment }}
@@ -493,7 +604,7 @@ jobs:
 
   Deliver:
     needs: [ Initialization, Build ]
-    if: ${{ (github.event_name != 'workflow_run') && (github.ref_name == 'main') && (needs.Initialization.outputs.deliveryTargetCount > 0) }}
+    if: always() && needs.Build.result == 'Success' && github.event_name != 'workflow_run' && github.ref_name == 'main' && needs.Initialization.outputs.deliveryTargetCount > 0
     strategy:
       matrix:
         deliveryTarget: ${{ fromJson(needs.Initialization.outputs.deliveryTargets) }}
@@ -539,14 +650,13 @@ jobs:
           deliveryTarget: ${{ matrix.deliveryTarget }}
           artifacts: '${{ github.workspace }}\.artifacts'
 
-  PostProcess:
-    if: always()
+  UpdatePRcheck:
+    if: always() && github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
     runs-on: [ windows-latest ]
-    needs: [ Initialization, Build, Deploy, Deliver ]
+    needs: [ Initialization, Build ]
     steps:
       - name: Update CI/CD Workflow Check Run
         uses: actions/github-script@v6
-        if: github.event_name == 'workflow_run'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -557,6 +667,11 @@ jobs:
               conclusion: '${{ needs.Build.result }}'
             });
 
+  PostProcess:
+    if: (!cancelled()) && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: [ windows-latest ]
+    needs: [ Initialization, Build, Deploy, Deliver ]
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
