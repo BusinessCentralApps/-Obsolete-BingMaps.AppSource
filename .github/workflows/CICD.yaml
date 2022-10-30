@@ -26,6 +26,8 @@ jobs:
   Initialization:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: [ windows-latest ]
+    env:
+      workflowDepth: 1
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
       settings: ${{ steps.ReadSettings.outputs.SettingsJson }}
@@ -184,6 +186,7 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "DeliveryTargets=$deliveryTargetsJson"
 
       - name: Determine Build Order
+        if: env.WorkflowDepth > 1
         id: BuildOrder
         run: |
           $ErrorActionPreference = "STOP"
