@@ -1,7 +1,5 @@
 ﻿{
-    "type":  "AppSource App",
     "country":  "us",
-    "LicenseFileUrlSecretName":  "LicenseFile",
     "VersioningStrategy":  16,
     "xKeyVaultCertificateUrlSecretName":  "KeyVaultCertificateFile",
     "xKeyVaultCertificatePasswordSecretName":  "KeyVaultCertificatePassword",
