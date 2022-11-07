@@ -41,7 +41,7 @@ defaults:
 
 jobs:
   CreatePerformanceTestApp:
-    runs-on: [ windows-latest ]
+    runs-on: [ bc-build ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
