@@ -2,7 +2,7 @@
     "type":  "AppSource App",
     "NextMajorSchedule":  "0 2 * * 0",
     "NextMinorSchedule":  "0 2 * * 6",
-    "githubrunner":  "bc-build",
+    "runs-on":  "bc-build",
     "templateUrl":  "https://github.com/freddydk/AL-Go-AppSource@main",
     "SendExtendedTelemetryToMicrosoft":  true,
     "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
