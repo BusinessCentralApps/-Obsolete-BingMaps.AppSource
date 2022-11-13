@@ -20,12 +20,10 @@ jobs:
     runs-on: [ windows-latest ]
     steps:
       - uses: actions/checkout@v3
-        if: github.event.pull_request.head.repo.full_name != github.repository
         with:
           lfs: true
 
       - name: Determine Changed Files
-        if: github.event.pull_request.head.repo.full_name != github.repository
         id: ChangedFiles
         run: |
           $ErrorActionPreference = "STOP"
@@ -53,8 +51,10 @@ jobs:
             $newfolder = [System.IO.Path]::GetDirectoryName($newpath)
             $extension = [System.IO.Path]::GetExtension($path)
             $name = [System.IO.Path]::GetFileName($path)
-            if ($extension -eq '.ps1' -or $extension -eq '.yaml' -or $extension -eq '.yml' -or $name -eq "CODEOWNERS") {
-              throw "Pull Request containing changes to scripts, workflows or CODEOWNERS are not allowed from forks."
+            if ('${{ github.event.pull_request.head.repo.full_name }}' -ne $ENV:GITHUB_REPOSITORY) {
+              if ($extension -eq '.ps1' -or $extension -eq '.yaml' -or $extension -eq '.yml' -or $name -eq "CODEOWNERS") {
+                throw "Pull Request containing changes to scripts, workflows or CODEOWNERS are not allowed from forks."
+              }
             }
             if (-not (Test-Path $newfolder)) {
               New-Item $newfolder -ItemType Directory | Out-Null
@@ -78,7 +78,6 @@ jobs:
           Set-Content -path (Join-Path $prPath "comment_id") -value '${{ steps.CreateComment.outputs.comment_id }}' -NoNewLine -Force
 
       - name: Upload Changed Files
-        if: github.event.pull_request.head.repo.full_name != github.repository
         uses: actions/upload-artifact@v3
         with:
           name: Pull_Request_Files
