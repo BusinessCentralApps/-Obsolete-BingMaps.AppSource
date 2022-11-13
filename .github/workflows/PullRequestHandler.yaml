@@ -20,12 +20,10 @@ jobs:
     runs-on: [ windows-latest ]
     steps:
       - uses: actions/checkout@v3
-        if: github.event.pull_request.head.repo.full_name != github.repository
         with:
           lfs: true
 
       - name: Determine Changed Files
-        if: github.event.pull_request.head.repo.full_name != github.repository
         id: ChangedFiles
         run: |
           $ErrorActionPreference = "STOP"
@@ -78,7 +76,6 @@ jobs:
           Set-Content -path (Join-Path $prPath "comment_id") -value '${{ steps.CreateComment.outputs.comment_id }}' -NoNewLine -Force
 
       - name: Upload Changed Files
-        if: github.event.pull_request.head.repo.full_name != github.repository
         uses: actions/upload-artifact@v3
         with:
           name: Pull_Request_Files
