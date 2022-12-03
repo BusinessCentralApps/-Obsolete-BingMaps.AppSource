@@ -209,29 +209,31 @@ jobs:
           }
           Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri '${{ matrix.url }}' -OutFile '${{ matrix.name }}.zip'
 
+      - name: dump
+        run: |
+          Write-Host '${{ matrix.name }}.zip'
+          Write-Host '${{ matrix.url }}'
+          Write-Host '${{ needs.createrelease.outputs.id }}'
+
       - name: Upload release artifacts
         uses: actions/github-script@v6
         env:
           uploadUrl: ${{ needs.createrelease.outputs.upload_url }}
+          releaseId: ${{ needs.createrelease.outputs.id }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const uploadUrl = process.env.uploadUrl
+            const releaseId = process.env.releaseId
             const assetPath = '${{ matrix.name }}.zip'
             const assetName = '${{ matrix.name }}.zip'
             const fs = require('fs');
-            const contentLength = filePath => fs.statSync(filePath).size;
-            const headers = { 'content-type': 'application/zip', 'content-length': contentLength(assetPath) };
             const uploadAssetResponse = await github.rest.repos.uploadReleaseAsset({
-              url: uploadUrl,
-              headers,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
               name: assetName,
-              file: fs.readFileSync(assetPath)
+              data: fs.readFileSync(assetPath)
             });
-            const {
-              data: { browser_download_url: browserDownloadUrl }
-            } = uploadAssetResponse;
-            core.setOutput('browser_download_url', browserDownloadUrl);
 
       - name: NuGetContext
         id: nuGetContext
