@@ -68,6 +68,7 @@ jobs:
     outputs:
       artifacts: ${{ steps.analyzeartifacts.outputs.artifacts }}
       upload_url: ${{ steps.createrelease.outputs.upload_url }}
+      releaseId: ${{ steps.createrelease.outputs.releaseId }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -171,7 +172,7 @@ jobs:
             const {
               data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl }
             } = createReleaseResponse;
-            core.setOutput('id', releaseId);
+            core.setOutput('releaseId', releaseId);
             core.setOutput('html_url', htmlUrl);
             core.setOutput('upload_url', uploadUrl);
 
@@ -213,13 +214,13 @@ jobs:
         run: |
           Write-Host '${{ matrix.name }}.zip'
           Write-Host '${{ matrix.url }}'
-          Write-Host '${{ needs.createrelease.outputs.id }}'
+          Write-Host '${{ needs.createrelease.outputs.releaseId }}'
 
       - name: Upload release artifacts
         uses: actions/github-script@v6
         env:
           uploadUrl: ${{ needs.createrelease.outputs.upload_url }}
-          releaseId: ${{ needs.createrelease.outputs.id }}
+          releaseId: ${{ needs.createrelease.outputs.releaseId }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
