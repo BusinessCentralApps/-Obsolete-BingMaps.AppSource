@@ -219,6 +219,7 @@ jobs:
             const uploadUrl = process.env.uploadUrl
             const assetPath = '${{ matrix.name }}.zip'
             const assetName = '${{ matrix.name }}.zip'
+            const fs = require('fs');
             const contentLength = filePath => fs.statSync(filePath).size;
             const headers = { 'content-type': 'application/zip', 'content-length': contentLength(assetPath) };
             const uploadAssetResponse = await github.repos.uploadReleaseAsset({
