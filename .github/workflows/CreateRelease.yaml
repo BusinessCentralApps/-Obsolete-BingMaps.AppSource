@@ -208,6 +208,29 @@ jobs:
               "Accept"        = "application/vnd.github.v3+json"
           }
           Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri '${{ matrix.url }}' -OutFile '${{ matrix.name }}.zip'
+
+      - name: Upload release artifacts
+        uses: actions/github-script@v6
+        env:
+          uploadUrl: ${{ needs.createrelease.outputs.upload_url }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const uploadUrl = process.env.uploadUrl
+            const assetPath = '${{ matrix.name }}.zip'
+            const assetName = '${{ matrix.name }}.zip'
+            const contentLength = filePath => fs.statSync(filePath).size;
+            const headers = { 'content-type': 'application/zip', 'content-length': contentLength(assetPath) };
+            const uploadAssetResponse = await github.repos.uploadReleaseAsset({
+              url: uploadUrl,
+              headers,
+              name: assetName,
+              file: fs.readFileSync(assetPath)
+            });
+            const {
+              data: { browser_download_url: browserDownloadUrl }
+            } = uploadAssetResponse;
+            core.setOutput('browser_download_url', browserDownloadUrl);
           
       - name: NuGetContext
         id: nuGetContext
