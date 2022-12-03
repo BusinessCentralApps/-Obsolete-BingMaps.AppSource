@@ -152,15 +152,18 @@ jobs:
       - name: Create release
         uses: actions/github-script@v6
         id: createrelease
+        env:
+          bodyMD: ${{ steps.createreleasenotes.outputs.releaseNotes }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            var bodyMD = process.env.bodyMD
             const createReleaseResponse = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: '${{ github.event.inputs.tag }}',
               name: '${{ github.event.inputs.name }}',
-              body: 'release notes',
+              body: bodyMD.replaceAll('\\n','\n'),
               draft: ${{ github.event.inputs.draft=='Y' }},
               prerelease: ${{ github.event.inputs.prerelease=='Y' }},
               target_commitish: '${{ steps.analyzeartifacts.outputs.commitish }}'
@@ -206,16 +209,6 @@ jobs:
           }
           Invoke-WebRequest -UseBasicParsing -Headers $headers -Uri '${{ matrix.url }}' -OutFile '${{ matrix.name }}.zip'
           
-      - name: Upload release artifacts
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ needs.createrelease.outputs.upload_url }}
-          asset_path: '${{ matrix.name }}.zip'
-          asset_name: '${{ matrix.name }}.zip'
-          asset_content_type: application/zip
-
       - name: NuGetContext
         id: nuGetContext
         if: ${{ env.NuGetContext }}
