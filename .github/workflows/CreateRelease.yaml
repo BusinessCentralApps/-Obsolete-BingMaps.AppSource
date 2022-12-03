@@ -162,7 +162,7 @@ jobs:
               name: '${{ github.event.inputs.name }}',
               draft: ${{ github.event.inputs.draft=='Y' }},
               prerelease: ${{ github.event.inputs.prerelease=='Y' }},
-              target_commitish: ${{ steps.analyzeartifacts.outputs.commitish }}
+              target_commitish: '${{ steps.analyzeartifacts.outputs.commitish }}'
             });
             const {
               data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl }
