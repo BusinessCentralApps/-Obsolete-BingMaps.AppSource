@@ -487,7 +487,6 @@ jobs:
 
       - name: Publish artifacts - apps
         uses: actions/upload-artifact@v3
-        if: github.ref_name == 'main' || startswith(github.ref_name, 'release/')
         with:
           name: ${{ env.appsArtifactsName }}
           path: '${{ matrix.project }}/.buildartifacts/Apps/'
@@ -495,7 +494,6 @@ jobs:
 
       - name: Publish artifacts - dependencies
         uses: actions/upload-artifact@v3
-        if: github.ref_name == 'main' || startswith(github.ref_name, 'release/')
         with:
           name: ${{ env.dependenciesArtifactsName }}
           path: '${{ matrix.project }}/.buildartifacts/Dependencies/'
@@ -503,7 +501,6 @@ jobs:
 
       - name: Publish artifacts - test apps
         uses: actions/upload-artifact@v3
-        if: github.ref_name == 'main' || startswith(github.ref_name, 'release/')
         with:
           name: ${{ env.testAppsArtifactsName }}
           path: '${{ matrix.project }}/.buildartifacts/TestApps/'
