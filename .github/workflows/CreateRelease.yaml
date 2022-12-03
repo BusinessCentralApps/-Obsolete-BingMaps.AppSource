@@ -118,7 +118,7 @@ jobs:
             $artifact | out-host
             if ($sha) {
               if ($artifact.workflow_run.head_sha -ne $sha) {
-                throw "The build selected for release doesn't contain all projects"
+                throw "The build selected for release doesn't contain all projects. Please rebuild all projects by manually running the CI/CD workflow and recreate the release."
               }
             }
             else {
@@ -222,7 +222,7 @@ jobs:
             const fs = require('fs');
             const contentLength = filePath => fs.statSync(filePath).size;
             const headers = { 'content-type': 'application/zip', 'content-length': contentLength(assetPath) };
-            const uploadAssetResponse = await github.repos.uploadReleaseAsset({
+            const uploadAssetResponse = await github.rest.repos.uploadReleaseAsset({
               url: uploadUrl,
               headers,
               name: assetName,
@@ -232,7 +232,7 @@ jobs:
               data: { browser_download_url: browserDownloadUrl }
             } = uploadAssetResponse;
             core.setOutput('browser_download_url', browserDownloadUrl);
-          
+
       - name: NuGetContext
         id: nuGetContext
         if: ${{ env.NuGetContext }}
