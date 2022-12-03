@@ -139,8 +139,8 @@ jobs:
           $artifactsJson = $artifacts | ConvertTo-Json -compress
           Add-Content -Path $env:GITHUB_OUTPUT -Value "artifacts=$artifactsJson"
           Write-Host "artifacts=$artifactsJson"
-          Add-Content -Path $env:GITHUB_OUTPUT -Value "committish=$sha"
-          Write-Host "committish=$sha"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "commitish=$sha"
+          Write-Host "commitish=$sha"
 
       - name: Prepare release notes
         id: createreleasenotes
@@ -158,8 +158,8 @@ jobs:
             const createReleaseResponse = await github.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: ${{ github.event.inputs.tag }},
-              name: ${{ github.event.inputs.name }},
+              tag_name: '${{ github.event.inputs.tag }}',
+              name: '${{ github.event.inputs.name }}',
               draft: ${{ github.event.inputs.draft=='Y' }},
               prerelease: ${{ github.event.inputs.prerelease=='Y' }},
               target_commitish: ${{ steps.analyzeartifacts.outputs.commitish }}
