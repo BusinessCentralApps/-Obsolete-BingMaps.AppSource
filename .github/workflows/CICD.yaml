@@ -173,7 +173,7 @@ jobs:
           secrets: ${{ toJson(secrets) }}
         with:
           settingsJson: ${{ env.Settings }}
-          secrets: ${{ ${{ steps.DetermineDeliveryTargetSecrets.outputs.Secrets }} }}
+          secrets: ${{ steps.DetermineDeliveryTargetSecrets.outputs.Secrets }}
 
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
