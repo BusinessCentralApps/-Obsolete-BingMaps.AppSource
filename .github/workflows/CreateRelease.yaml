@@ -152,8 +152,6 @@ jobs:
       - name: Create release
         uses: actions/github-script@v6
         id: createrelease
-        env:
-          bodyMD: ${{ steps.createreleasenotes.outputs.releaseNotes }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
