@@ -37,11 +37,11 @@ permissions:
 
 defaults:
   run:
-    shell: powershell
+    shell: pwsh
 
 jobs:
   CreatePerformanceTestApp:
-    runs-on: [ bc-build ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -50,13 +50,13 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0102"
 
       - name: Creating a new test app
         uses: freddydk/AL-Go-Actions/CreateApp@main
         with:
-          shell: powershell
+          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           type: 'Performance Test App'
@@ -71,6 +71,6 @@ jobs:
         if: always()
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0102"
           telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}

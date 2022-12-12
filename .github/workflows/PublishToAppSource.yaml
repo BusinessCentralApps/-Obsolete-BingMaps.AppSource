@@ -18,11 +18,11 @@ permissions:
 
 defaults:
   run:
-    shell: powershell
+    shell: pwsh
 
 jobs:
   Initialization:
-    runs-on: [ bc-build ]
+    runs-on: [ ubuntu-latest ]
     outputs:
       telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
     steps:
@@ -33,12 +33,12 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0103"
 
   Deliver:
     needs: [ Initialization ]
-    runs-on: [ bc-build ]
+    runs-on: [ ubuntu-latest ]
     name: Deliver to AppSource
     steps:
       - name: Checkout
@@ -47,7 +47,7 @@ jobs:
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
-          shell: powershell
+          shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
 
       - name: Read secrets
@@ -55,7 +55,7 @@ jobs:
         env:
           secrets: ${{ toJson(secrets) }}
         with:
-          shell: powershell
+          shell: pwsh
           settingsJson: ${{ env.Settings }}
           secrets: 'appSourceContext'
 
@@ -74,7 +74,7 @@ jobs:
         env:
           deliveryContext: '${{ steps.deliveryContext.outputs.deliveryContext }}'
         with:
-          shell: powershell
+          shell: pwsh
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           type: 'Release'
           projects: '*'
@@ -84,7 +84,7 @@ jobs:
 
   PostProcess:
     if: always()
-    runs-on: [ bc-build ]
+    runs-on: [ ubuntu-latest ]
     needs: [ Initialization, Deliver ]
     steps:
       - name: Checkout
@@ -94,6 +94,6 @@ jobs:
         id: PostProcess
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0103"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}

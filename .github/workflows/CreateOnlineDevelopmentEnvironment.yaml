@@ -21,11 +21,11 @@ permissions:
 
 defaults:
   run:
-    shell: powershell
+    shell: pwsh
 
 jobs:
   CreateOnlineDevelopmentEnvironment:
-    runs-on: [ bc-build ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,13 +34,13 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0093"
 
       - name: Read settings
         uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
-          shell: powershell
+          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
 
       - name: Read secrets
@@ -48,7 +48,7 @@ jobs:
         env:
           secrets: ${{ toJson(secrets) }}
         with:
-          shell: powershell
+          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
           secrets: 'adminCenterApiCredentials'
@@ -78,7 +78,7 @@ jobs:
       - name: Create Development Environment
         uses: freddydk/AL-Go-Actions/CreateDevelopmentEnvironment@main
         with:
-          shell: powershell
+          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           environmentName: ${{ github.event.inputs.environmentName }}
           reUseExistingEnvironment: ${{ github.event.inputs.reUseExistingEnvironment }}
@@ -89,6 +89,6 @@ jobs:
         if: always()
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0093"
           telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
