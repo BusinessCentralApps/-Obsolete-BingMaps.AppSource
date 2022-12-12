@@ -21,11 +21,11 @@ permissions:
 
 defaults:
   run:
-    shell: powershell
+    shell: pwsh
 
 jobs:
   IncrementVersionNumber:
-    runs-on: [ bc-build ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,13 +34,13 @@ jobs:
         id: init
         uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0096"
 
       - name: Increment Version Number
         uses: freddydk/AL-Go-Actions/IncrementVersionNumber@main
         with:
-          shell: powershell
+          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           project: ${{ github.event.inputs.project }}
           versionNumber: ${{ github.event.inputs.versionNumber }}
@@ -50,6 +50,6 @@ jobs:
         if: always()
         uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
-          shell: powershell
+          shell: pwsh
           eventId: "DO0096"
           telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
