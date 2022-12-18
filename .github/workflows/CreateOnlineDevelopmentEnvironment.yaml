@@ -21,7 +21,7 @@ permissions:
 
 defaults:
   run:
-    shell: pwsh
+    shell: PowerShell
 
 jobs:
   CreateOnlineDevelopmentEnvironment:
@@ -32,31 +32,26 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        uses: microsoft/AL-Go-Actions/WorkflowInitialize@preview
         with:
-          shell: pwsh
           eventId: "DO0093"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        uses: microsoft/AL-Go-Actions/ReadSettings@preview
         with:
-          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        uses: microsoft/AL-Go-Actions/ReadSecrets@preview
         env:
           secrets: ${{ toJson(secrets) }}
         with:
-          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           settingsJson: ${{ env.Settings }}
           secrets: 'adminCenterApiCredentials'
 
       - name: Check AdminCenterApiCredentials / Initiate Device Login (open to see code)
         run: |
-          $ErrorActionPreference = "STOP"
-          Set-StrictMode -version 2.0
           $adminCenterApiCredentials = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($env:adminCenterApiCredentials))
           if ($adminCenterApiCredentials) {
             Write-Host "AdminCenterApiCredentials provided!"
@@ -65,7 +60,7 @@ jobs:
             Write-Host "AdminCenterApiCredentials not provided, initiating Device Code flow"
             $ALGoHelperPath = "$([System.IO.Path]::GetTempFileName()).ps1"
             $webClient = New-Object System.Net.WebClient
-            $webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/main/AL-Go-Helper.ps1', $ALGoHelperPath)
+            $webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/preview/AL-Go-Helper.ps1', $ALGoHelperPath)
             . $ALGoHelperPath
             $BcContainerHelperPath = DownloadAndImportBcContainerHelper -baseFolder $ENV:GITHUB_WORKSPACE
             $authContext = New-BcAuthContext -includeDeviceLogin -deviceLoginTimeout ([TimeSpan]::FromSeconds(0))
@@ -76,9 +71,8 @@ jobs:
           }
 
       - name: Create Development Environment
-        uses: freddydk/AL-Go-Actions/CreateDevelopmentEnvironment@main
+        uses: microsoft/AL-Go-Actions/CreateDevelopmentEnvironment@preview
         with:
-          shell: pwsh
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           environmentName: ${{ github.event.inputs.environmentName }}
           reUseExistingEnvironment: ${{ github.event.inputs.reUseExistingEnvironment }}
@@ -87,8 +81,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
+        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@preview
         with:
-          shell: pwsh
           eventId: "DO0093"
           telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
