@@ -191,7 +191,7 @@ jobs:
           if ($env:type -eq "AppSource App") {
             $continuousDelivery = $false
             '${{ steps.ReadSettings.outputs.ProjectsJson }}' | Out-Host
-            '${{ steps.ReadSettings.outputs.ProjectsJson }}' | ConvertFrom-Json | ForEach-Object {
+            ('${{ steps.ReadSettings.outputs.ProjectsJson }}' | ConvertFrom-Json) | where-Object { $_ } | ForEach-Object {
               Write-Host "Check $_"
               $projectSettings = Get-Content (Join-Path $_ '.AL-Go/settings.json') -raw | ConvertFrom-Json
               $projectSettings | Out-Host
