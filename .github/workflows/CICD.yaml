@@ -190,7 +190,7 @@ jobs:
           $deliveryTargets = @('GitHubPackages','NuGet','Storage')
           if ($env:type -eq "AppSource App") {
             $continuousDelivery = $false
-            '${{ steps.ReadSettings.outputs.ProjectsJson }}' | Out.Host
+            '${{ steps.ReadSettings.outputs.ProjectsJson }}' | Out-Host
             '${{ steps.ReadSettings.outputs.ProjectsJson }}' | ConvertFrom-Json | ForEach-Object {
               Write-Host "Check $_"
               $projectSettings = Get-Content (Join-Path $_ '.AL-Go/settings.json') -raw | ConvertFrom-Json
