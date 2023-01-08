@@ -1,4 +1,4 @@
-﻿name: ' Publish To Environment'
+name: ' Publish To Environment'
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ permissions:
 
 defaults:
   run:
-    shell: powershell
+    shell: PowerShell
 
 jobs:
   Initialization:
@@ -33,16 +33,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
+        uses: microsoft/AL-Go-Actions/WorkflowInitialize@v2.2
         with:
-          shell: powershell
           eventId: "DO0097"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
+        uses: microsoft/AL-Go-Actions/ReadSettings@v2.2
         with:
-          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           getEnvironments: ${{ github.event.inputs.environmentName }}
           includeProduction: 'Y'
@@ -63,29 +61,24 @@ jobs:
         id: envName
         run: |
           $ErrorActionPreference = "STOP"
-          Set-StrictMode -version 2.0
           $envName = '${{ matrix.environment }}'.split(' ')[0]
           Add-Content -Path $env:GITHUB_OUTPUT -Value "envName=$envName"
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@main
-        with:
-          shell: powershell
+        uses: microsoft/AL-Go-Actions/ReadSettings@v2.2
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@main
+        uses: microsoft/AL-Go-Actions/ReadSecrets@v2.2
         env:
           secrets: ${{ toJson(secrets) }}
         with:
-          shell: powershell
           settingsJson: ${{ env.Settings }}
-          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,projects'
+          secrets: '${{ steps.envName.outputs.envName }}-AuthContext,${{ steps.envName.outputs.envName }}_AuthContext,AuthContext,${{ steps.envName.outputs.envName }}-EnvironmentName,${{ steps.envName.outputs.envName }}_EnvironmentName,EnvironmentName,Projects'
 
       - name: AuthContext
         id: authContext
         run: |
           $ErrorActionPreference = "STOP"
-          Set-StrictMode -version 2.0
           $envName = '${{ steps.envName.outputs.envName }}'
           $authContext = $null
           "$($envName)-AuthContext", "$($envName)_AuthContext", "AuthContext" | ForEach-Object {
@@ -114,7 +107,7 @@ jobs:
           }
           $environmentName = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(($environmentName + '${{ matrix.environment }}'.SubString($envName.Length)).ToUpperInvariant()))
 
-          $projects = [System.Environment]::GetEnvironmentVariable("$($envName)-projects")
+          $projects = [System.Environment]::GetEnvironmentVariable("$($envName)-Projects")
           if (-not $projects) {
             $projects = [System.Environment]::GetEnvironmentVariable("$($envName)_Projects")
             if (-not $projects) {
@@ -133,11 +126,10 @@ jobs:
           Write-Host "projects=$projects"
 
       - name: Deploy
-        uses: freddydk/AL-Go-Actions/Deploy@main
+        uses: microsoft/AL-Go-Actions/Deploy@v2.2
         env:
-          AuthContext: ${{ steps.authContext.outputs.authContext }}
+          authContext: ${{ steps.authContext.outputs.authContext }}
         with:
-          shell: powershell
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           type: 'Publish'
           projects: ${{ steps.authContext.outputs.projects }}
@@ -154,8 +146,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
+        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@v2.2
         with:
-          shell: powershell
           eventId: "DO0097"
           telemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
