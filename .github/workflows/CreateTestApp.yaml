@@ -1,4 +1,4 @@
-﻿name: 'Create a new test app'
+name: 'Create a new test app'
 
 on:
   workflow_dispatch:
@@ -44,13 +44,13 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue328
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue318
         with:
           shell: powershell
           eventId: "DO0095"
 
       - name: Creating a new test app
-        uses: freddydk/AL-Go-Actions/CreateApp@issue328
+        uses: freddydk/AL-Go-Actions/CreateApp@issue318
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue328
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue318
         with:
           shell: powershell
           eventId: "DO0095"
