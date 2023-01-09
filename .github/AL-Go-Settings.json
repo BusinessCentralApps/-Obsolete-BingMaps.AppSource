@@ -1,12 +1,12 @@
-﻿{
-    "type":  "AppSource App",
-    "templateUrl":  "https://github.com/freddydk/AL-Go-AppSource@issue328",
-    "NextMajorSchedule":  "0 2 * * 0",
-    "NextMinorSchedule":  "0 2 * * 6",
-    "CurrentSchedule":  "0 2 * * 1,2,3,4,5",
-    "UpdateDependencies":  true,
-    "SendExtendedTelemetryToMicrosoft":  true,
-    "PartnerTelemetryConnectionString":  "InstrumentationKey=84bd9223-67d4-4378-8590-9e4a46023be2;IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/",
-    "runs-on":  "windows-latest",
-    "unusedALGoSystemFiles": [ "AddExistingAppOrTestApp.yaml", "CreateApp.yaml", "CreateTestApp.yaml", "CreatePerformanceTestApp.yaml" ]
+{
+  "type": "AppSource App",
+  "templateUrl": "https://github.com/freddydk/AL-Go-AppSource@issue318",
+  "NextMajorSchedule": "0 2 * * 0",
+  "NextMinorSchedule": "0 2 * * 6",
+  "CurrentSchedule": "0 2 * * 1,2,3,4,5",
+  "UpdateDependencies": true,
+  "SendExtendedTelemetryToMicrosoft": true,
+  "PartnerTelemetryConnectionString": "InstrumentationKey=84bd9223-67d4-4378-8590-9e4a46023be2;IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/",
+  "runs-on": "windows-latest",
+  "unusedALGoSystemFiles": [ "AddExistingAppOrTestApp.yaml", "CreateApp.yaml", "CreateTestApp.yaml", "CreatePerformanceTestApp.yaml" ]
 }
