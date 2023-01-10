@@ -1,4 +1,4 @@
-﻿name: ' Increment Version Number'
+name: ' Increment Version Number'
 
 on:
   workflow_dispatch:
@@ -32,13 +32,13 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue328
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue318
         with:
           shell: powershell
           eventId: "DO0096"
 
       - name: Increment Version Number
-        uses: freddydk/AL-Go-Actions/IncrementVersionNumber@issue328
+        uses: freddydk/AL-Go-Actions/IncrementVersionNumber@issue318
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -48,7 +48,7 @@ jobs:
   
       - name: Finalize the workflow
         if: always()
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue328
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue318
         with:
           shell: powershell
           eventId: "DO0096"

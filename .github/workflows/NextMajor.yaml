@@ -1,4 +1,4 @@
-﻿name: ' Test Next Major'
+name: ' Test Next Major'
 
 on:
   workflow_dispatch:
@@ -34,14 +34,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue328
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue318
         with:
           shell: powershell
           eventId: "DO0099"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@issue328
+        uses: freddydk/AL-Go-Actions/ReadSettings@issue318
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -113,14 +113,14 @@ jobs:
           path: '${{ github.workspace }}\.dependencies'
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@issue328
+        uses: freddydk/AL-Go-Actions/ReadSettings@issue318
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@issue328
+        uses: freddydk/AL-Go-Actions/ReadSecrets@issue318
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -130,7 +130,7 @@ jobs:
           secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,gitHubPackagesContext'
 
       - name: Run pipeline
-        uses: freddydk/AL-Go-Actions/RunPipeline@issue328
+        uses: freddydk/AL-Go-Actions/RunPipeline@issue318
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -208,7 +208,7 @@ jobs:
       - name: Analyze Test Results
         id: analyzeTestResults
         if: success() || failure()
-        uses: freddydk/AL-Go-Actions/AnalyzeTests@issue328
+        uses: freddydk/AL-Go-Actions/AnalyzeTests@issue318
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -216,7 +216,7 @@ jobs:
 
       - name: Cleanup
         if: always()
-        uses: freddydk/AL-Go-Actions/PipelineCleanup@issue328
+        uses: freddydk/AL-Go-Actions/PipelineCleanup@issue318
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -232,7 +232,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue328
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue318
         with:
           shell: powershell
           eventId: "DO0099"
