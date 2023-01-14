@@ -21,10 +21,10 @@ $webClient.CachePolicy = New-Object System.Net.Cache.RequestCachePolicy -argumen
 $webClient.Encoding = [System.Text.Encoding]::UTF8
 Write-Host "Downloading GitHub Helper module"
 $GitHubHelperPath = "$([System.IO.Path]::GetTempFileName()).psm1"
-$webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/issue344/Github-Helper.psm1', $GitHubHelperPath)
+$webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/main/Github-Helper.psm1', $GitHubHelperPath)
 Write-Host "Downloading AL-Go Helper script"
 $ALGoHelperPath = "$([System.IO.Path]::GetTempFileName()).ps1"
-$webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/issue344/AL-Go-Helper.ps1', $ALGoHelperPath)
+$webClient.DownloadFile('https://raw.githubusercontent.com/freddydk/AL-Go-Actions/main/AL-Go-Helper.ps1', $ALGoHelperPath)
 
 Import-Module $GitHubHelperPath
 . $ALGoHelperPath -local
@@ -112,7 +112,8 @@ if (-not $licenseFileUrl) {
         -title "LicenseFileUrl" `
         -description $description `
         -question "Local path or a secure download URL to license file " `
-        -default $default
+        -default $default `
+        -doNotConvertToLower
 
     if ($licenseFileUrl -eq "none") {
         $licenseFileUrl = ""

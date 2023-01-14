@@ -7,6 +7,10 @@ on:
         description: App version to deliver to AppSource (current, prerelease, draft, latest or version number)
         required: false
         default: 'current'
+      projects:
+        description: Projects to publish to AppSource if the repository is multi-project. Default is *, which will publish all projects to AppSource.
+        required: false
+        default: '*'
       GoLive:
         description: Promote AppSource App to go live if it passes technical validation? (Y/N)
         required: false
@@ -31,7 +35,7 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@issue344
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
           shell: powershell
           eventId: "DO0103"
@@ -45,13 +49,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@issue344
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@issue344
+        uses: freddydk/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -70,14 +74,14 @@ jobs:
           Write-Host "deliveryContext=$deliveryContext"
 
       - name: Deliver
-        uses: freddydk/AL-Go-Actions/Deliver@issue344
+        uses: freddydk/AL-Go-Actions/Deliver@main
         env:
           deliveryContext: '${{ steps.deliveryContext.outputs.deliveryContext }}'
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           type: 'Release'
-          projects: '*'
+          projects: ${{ github.event.inputs.projects }}
           deliveryTarget: 'AppSource'
           artifacts: ${{ github.event.inputs.appVersion }}
           goLive: ${{ github.event.inputs.goLive }}
@@ -92,7 +96,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@issue344
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
           shell: powershell
           eventId: "DO0103"
