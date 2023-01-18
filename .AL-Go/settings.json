@@ -17,5 +17,14 @@
     "testFolders":  [
                     ],
     "RepoVersion":  "3.1",
-    "SkipUpgrade":  true
+    "SkipUpgrade":  true,
+    "appDependencyProbingPaths": [
+        {
+          "repo": "https://github.com/businesscentralapps/BingMaps.PTE",
+          "version": "latest",
+          "release_status": "release",
+          "projects": "*",
+          "authTokenSecret": "GHTOKENWORKFLOW"
+        }
+      ]
 }
