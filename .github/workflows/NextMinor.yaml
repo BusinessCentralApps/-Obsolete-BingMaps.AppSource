@@ -36,14 +36,14 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: freddydk/AL-Go-Actions/WorkflowInitialize@perf
+        uses: freddydk/AL-Go-Actions/WorkflowInitialize@main
         with:
           shell: powershell
           eventId: "DO0100"
 
       - name: Read settings
         id: ReadSettings
-        uses: freddydk/AL-Go-Actions/ReadSettings@perf
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
@@ -90,7 +90,7 @@ jobs:
 
   Build:
     needs: [ Initialization ]
-    if: ${{ needs.Initialization.outputs.projectCount > 0 }}
+    if: (!failure()) && (!cancelled()) && needs.Initialization.outputs.projectCount > 0
     runs-on: ${{ fromJson(needs.Initialization.outputs.githubRunner) }}
     defaults:
       run:
@@ -115,14 +115,14 @@ jobs:
           path: '${{ github.workspace }}\.dependencies'
 
       - name: Read settings
-        uses: freddydk/AL-Go-Actions/ReadSettings@perf
+        uses: freddydk/AL-Go-Actions/ReadSettings@main
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
           project: ${{ matrix.project }}
 
       - name: Read secrets
-        uses: freddydk/AL-Go-Actions/ReadSecrets@perf
+        uses: freddydk/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -132,7 +132,7 @@ jobs:
           secrets: 'licenseFileUrl,insiderSasToken,codeSignCertificateUrl,codeSignCertificatePassword,keyVaultCertificateUrl,keyVaultCertificatePassword,keyVaultClientId,gitHubPackagesContext'
 
       - name: Run pipeline
-        uses: freddydk/AL-Go-Actions/RunPipeline@perf
+        uses: freddydk/AL-Go-Actions/RunPipeline@main
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -210,7 +210,7 @@ jobs:
       - name: Analyze Test Results
         id: analyzeTestResults
         if: success() || failure()
-        uses: freddydk/AL-Go-Actions/AnalyzeTests@perf
+        uses: freddydk/AL-Go-Actions/AnalyzeTests@main
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -218,7 +218,7 @@ jobs:
 
       - name: Cleanup
         if: always()
-        uses: freddydk/AL-Go-Actions/PipelineCleanup@perf
+        uses: freddydk/AL-Go-Actions/PipelineCleanup@main
         with:
           shell: ${{ needs.Initialization.outputs.githubRunnerShell }}
           parentTelemetryScopeJson: ${{ needs.Initialization.outputs.telemetryScopeJson }}
@@ -234,7 +234,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@perf
+        uses: freddydk/AL-Go-Actions/WorkflowPostProcess@main
         with:
           shell: powershell
           eventId: "DO0100"
