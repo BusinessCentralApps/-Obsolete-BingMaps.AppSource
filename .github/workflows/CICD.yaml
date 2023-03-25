@@ -44,6 +44,10 @@ jobs:
         with:
           lfs: true
 
+      - name: ENV
+        run: |
+          dir env:
+
       - name: Initialize the workflow
         id: init
         uses: microsoft/AL-Go-Actions/WorkflowInitialize@preview
@@ -192,6 +196,10 @@ jobs:
         with:
           lfs: true
     
+      - name: ENV
+        run: |
+          dir env:
+
       - name: Download thisbuild artifacts
         if: env.workflowDepth > 1
         uses: actions/download-artifact@v3
