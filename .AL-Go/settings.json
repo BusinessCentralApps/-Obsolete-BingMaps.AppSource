@@ -12,6 +12,5 @@
     "AppSourceProductId":  "5fbe0803-a545-4504-b41a-d9d158112360",
     "AppSourceContinuousDelivery":  true,
     "obsoleteTagMinAllowedMajorMinor":  "20.0",
-    "RepoVersion":  "3.1",
-    "SkipUpgrade":  true
+    "RepoVersion":  "3.1"
 }
