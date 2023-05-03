@@ -1,8 +1,10 @@
 table 70074120 "BingMaps Customer"
 {
+    Access = Internal;
+
     fields
     {
-        field(70074120; "No."; Code[20])
+        field(70074120; "No."; Code[21])
         {
             DataClassification = CustomerContent;
         }
@@ -29,7 +31,7 @@ table 70074120 "BingMaps Customer"
             DataClassification = CustomerContent;
         }
 
-        field(70074125; "Address"; Text[200])
+        field(70074125; "Address"; Text[199])
         {
             DataClassification = CustomerContent;
         }
@@ -38,16 +40,16 @@ table 70074120 "BingMaps Customer"
 
     keys
     {
-        key("No."; "No.")
+        key("No.2"; "No.")
         {
         }
 
-        key("Latitude"; "Latitude")
+        key("Latitude2"; "Latitude")
         {
 
         }
 
-        key("Longitude"; "Longitude")
+        key("Longitude2"; "Longitude")
         {
         }
     }
