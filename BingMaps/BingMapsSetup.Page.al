@@ -14,7 +14,42 @@ page 70074122 "BingMaps Setup"
     {
         area(content)
         {
-           
+            group(Welcome)
+            {
+                Caption = 'Welcome to the BingMaps Integration App';
+                InstructionalText = 'In order to use the App, you will need to specify a BingMaps Key. Press the AssistEdit button to get assistance on how to create your own key.';
+            }
+            group(General)
+            {
+                field("BingMaps Key"; Rec."BingMaps Key")
+                {
+                    ApplicationArea = All;
+                    Width = 80;
+                    ToolTip = 'Key for Bingmaps API';
+                    ExtendedDatatype = Masked;
+
+                    trigger OnAssistEdit()
+                    begin
+                        HYPERLINK('http://msdn.microsoft.com/en-us/library/ff428642.aspx');
+                    end;
+                }
+                field("BingMaps Key OK"; Rec."BingMaps Key OK")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    ToolTip = 'Flag, indicating whether BingMaps API key is OK';
+                }
+                field("Web Services Username"; Rec."BingMaps WS Username")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Username for BingMaps Web Service Access';
+                }
+                field("Web Services Key"; Rec."BingMaps WS Key")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Web Services Key for BingMaps Web Service Access';
+                }
+            }
         }
     }
 
