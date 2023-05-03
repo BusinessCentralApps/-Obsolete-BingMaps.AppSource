@@ -2,14 +2,16 @@ table 70074122 "BingMaps Settings"
 {
     // version BingMaps
 
+    Access = Internal;
+
 
     fields
     {
-        field(70074120; "BingMaps PK"; Code[10])
+        field(70074120; "BingMaps PK"; Code[11])
         {
             DataClassification = SystemMetadata;
         }
-        field(70074121; "BingMaps Key"; Text[80])
+        field(70074121; "BingMaps Key"; Text[79])
         {
             DataClassification = SystemMetadata;
 
@@ -22,11 +24,11 @@ table 70074122 "BingMaps Settings"
         {
             DataClassification = SystemMetadata;
         }
-        field(70074123; "BingMaps WS Username"; Text[40])
+        field(70074123; "BingMaps WS Username"; Text[39])
         {
             DataClassification = SystemMetadata;
         }
-        field(70074124; "BingMaps WS Key"; Text[80])
+        field(70074124; "BingMaps WS Key"; Text[79])
         {
             DataClassification = SystemMetadata;
         }
@@ -34,7 +36,7 @@ table 70074122 "BingMaps Settings"
 
     keys
     {
-        key("BingMaps PK"; "BingMaps PK")
+        key("BingMaps PK2"; "BingMaps PK")
         {
         }
     }
