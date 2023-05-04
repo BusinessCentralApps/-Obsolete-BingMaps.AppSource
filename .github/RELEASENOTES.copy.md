@@ -1,11 +1,34 @@
+## Preview
+
+Note that when using the preview version of AL-Go for GitHub, you need to Update your AL-Go system files, as soon as possible when told to do so.
+
+### Issues
+Issue #446 Wrong NewLine character in Release Notes
+Issue #453 DeliverToStorage - override fails reading secrets
+
+### New Settings
+New Project Setting: `UseCompilerFolder`. Setting useCompilerFolder to true causes your pipelines to use containerless compiling. Unless you also set `doNotPublishApps` to true, setting useCompilerFolder to true won't give you any performance advantage, since AL-Go for GitHub will still need to create a container in order to publish and test the apps. In the future, publishing and testing will be split from building and there will be other options for getting an instance of Business Central for publishing and testing. 
+
+### New Actions
+- **DetermineArtifactUrl** is used to determine which artifacts to use for building a project in CI/CD, PullRequestHandler, Current, NextMinor and NextMajor workflows.
+
 ## v3.0
 
 ### **NOTE:** When upgrading to this version
 When upgrading to this version form earlier versions of AL-Go for GitHub, you will need to run the _Update AL-Go System Files_ workflow twice if you have the `useProjectDependencies` setting set to _true_.
 
+### Publish to unknown environment
+You can now run the **Publish To Environment** workflow without creating the environment in GitHub or settings up-front, just by specifying the name of a single environment in the Environment Name when running the workflow.
+Subsequently, if an AuthContext secret hasn't been created for this environment, the Device Code flow authentication will be initiated from the Publish To Environment workflow and you can publish to the new environment without ever creating a secret.
+Open Workflow details to get the device Code for authentication in the job summary for the initialize job.
+
+### Create Online Dev. Environment
+When running the **Create Online Dev. Environment** workflow without having the _adminCenterApiCredentials_ secret created, the workflow will intiate the deviceCode flow and allow you to authenticate to the Business Central Admin Center.
+Open Workflow details to get the device Code for authentication in the job summary for the initialize job.
+
 ### Issues
 - Issue #391 Create release action - CreateReleaseBranch error
-- Issue #434 Building local DevEnv, downloading dependencies: Authentication fails when using "gh auth status"
+- Issue 434 Building local DevEnv, downloading dependencies: Authentication fails when using "gh auth status"
 
 ### Changes to Pull Request Process
 In v2.4 and earlier, the PullRequestHandler would trigger the CI/CD workflow to run the PR build.
