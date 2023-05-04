@@ -9,6 +9,7 @@
   "PartnerTelemetryConnectionString": "InstrumentationKey=84bd9223-67d4-4378-8590-9e4a46023be2;IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/",
   "runs-on": "ubuntu-latest",
   "gitHubRunner": "self-hosted",
+  "gitHubRunnerShell": "powershell",
   "unusedALGoSystemFiles": [
     "AddExistingAppOrTestApp.yaml",
     "CreateApp.yaml",
