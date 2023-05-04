@@ -41,6 +41,7 @@
     "keyVaultUrls":  [
 
                      ],
+    "applicationInsightsConnectionString":  "InstrumentationKey=84bd9223-67d4-4378-8590-9e4a46023be2;IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/",
     "internalsVisibleTo":[
         {
             "id":  "81eb0a83-7ca0-42e3-9dac-0b530a7c326b",
