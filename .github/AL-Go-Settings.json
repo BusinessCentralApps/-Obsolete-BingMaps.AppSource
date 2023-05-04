@@ -14,5 +14,7 @@
     "CreateApp.yaml",
     "CreateTestApp.yaml",
     "CreatePerformanceTestApp.yaml"
-  ]
+  ],
+  "SkipUpgrade": true,
+  "enableAppSourceCop": false
 }
