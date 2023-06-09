@@ -10,7 +10,7 @@
                                          "BIN"
                                      ],
     "AppSourceProductId":  "5fbe0803-a545-4504-b41a-d9d158112360",
-    "AppSourceContinuousDelivery":  true,
+    "AppSourceContinuousDelivery":  false,
     "obsoleteTagMinAllowedMajorMinor":  "20.0",
     "RepoVersion":  "3.1"
 }
