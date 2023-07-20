@@ -1,5 +1,2 @@
 # BingMaps.AppSource
-Welcome to this Open Source AppSource App, which is an integration with Bing Maps inside Business Central.
-
-## Contribute
-Please fork this repository and submit a Pull Request with your suggested changes.
+This repo is moved to https://github.com/microsoft/bcsamples-bingmaps.appsource
